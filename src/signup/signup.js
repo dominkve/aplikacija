@@ -65,9 +65,6 @@ function signIn(email, password) {
       const user = userCredential.user;
       console.log("User signed in:", user);
       window.location.assign("main.html");
-
-      // save user data
-      localStorage.setItem('user', user.email);
       // ...
     })
     .catch((error) => {
