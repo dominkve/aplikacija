@@ -2,8 +2,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // Add Firebase products that you want to use
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js'
 // https://firebase.google.com/docs/web/setup#available-libraries
+
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -21,7 +22,7 @@ measurementId: "G-HMTTWPWD75"
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
-document.getElementById('signup-form').addEventListener('submit', function(event) {
+let signupListener = function(event) {
     event.preventDefault(); // Prevent the default form submission (page reload)
   
     // Get email and password values from the form
@@ -29,7 +30,9 @@ document.getElementById('signup-form').addEventListener('submit', function(event
     const password = document.getElementById('password1').value;
   
     signUp(email, password); // Call the signUp function with email and password
-});
+};
+
+document.getElementById('signup-form').addEventListener('submit', signupListener);
 
 function signUp(email, password) {
     createUserWithEmailAndPassword(auth, email, password)
@@ -37,7 +40,27 @@ function signUp(email, password) {
         // Signed up 
         const user = userCredential.user;
         console.log("User created:", user);
-        window.location.assign("main.html");
+        
+        // get the users username
+        document.getElementById('email-password').classList.add('hidden');
+        document.getElementById('signin-btn').classList.add('hidden');
+        document.getElementById('username-container').classList.remove('hidden');
+
+        document.getElementById('signup-form').removeEventListener('submit', signupListener);
+
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            console.log("Username entered:", username);
+            updateProfile(auth.currentUser, {
+                displayName: username,
+            }).then(() => {
+                console.log("Username set to: ", auth.currentUser.displayName);
+            }).catch((error) => {
+                console.error("Error updating profile:", error);
+            });
+        });
         // ...
     })
     .catch((error) => {

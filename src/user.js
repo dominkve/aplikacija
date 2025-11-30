@@ -22,7 +22,7 @@ onAuthStateChanged(auth, (user) => {
     console.log("User is signed in:", user);
 
     // Update UI or do whatever you need with the user data
-    document.getElementById('user-info').textContent = user.email;
+    document.getElementById('user-info').textContent = "Username:\t" + user.displayName + "\t||\tEmail:\t" + user.email;
   } else {
     // User is signed out, redirect back to login
     console.log("No user signed in, redirecting to login");
