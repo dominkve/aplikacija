@@ -2,7 +2,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // Add Firebase products that you want to use
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js'
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js';
+import { getFirestore, collection, addDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 
@@ -21,6 +22,7 @@ measurementId: "G-HMTTWPWD75"
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
+const db = getFirestore(app);
 
 let signupListener = function(event) {
     event.preventDefault(); // Prevent the default form submission (page reload)
@@ -44,7 +46,7 @@ function signUp(email, password) {
         // get the users username
         document.getElementById('email-password').classList.add('hidden');
         document.getElementById('signin-btn').classList.add('hidden');
-        document.getElementById('username-container').classList.remove('hidden');
+        document.getElementById('names-container').classList.remove('hidden');
 
         document.getElementById('signup-form').removeEventListener('submit', signupListener);
 
@@ -60,8 +62,29 @@ function signUp(email, password) {
             }).catch((error) => {
                 console.error("Error updating profile:", error);
             });
-        });
+
+            let name = document.getElementById('name').value;
+            let surname = document.getElementById('surname').value;
+
+            console.log("Name:", name, "Surname:", surname);
+
+            console.log("User UID:", user.uid);
+
+            // Add user details to Firestore
+            setDoc(doc(db, "users", user.uid), {
+                first: name,
+                last: surname,
+            })
+            .then((docRef) => {
+                console.log("Document written with ID: ", docRef.id);
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+            });
+
+            window.location.assign("main.html");
         // ...
+        });
     })
     .catch((error) => {
         const errorCode = error.code;
@@ -96,4 +119,3 @@ function signIn(email, password) {
       console.error("Error code:", errorCode, "Error message:", errorMessage);
     });
 };
-
