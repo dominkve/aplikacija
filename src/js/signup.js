@@ -6,7 +6,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, up
 import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-import { firebaseConfig } from '../config.js';
+import { firebaseConfig } from './config.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
