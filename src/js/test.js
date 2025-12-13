@@ -46,6 +46,40 @@ let start_test = function() {
 
         document.body.appendChild(clone);
     }
+
+    console.log("Starting timer.")
+
+    let total_time = 0.1*60; //  6 seconds
+
+    let minutes = Math.floor(total_time/60);
+    let seconds = total_time%60;
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+    console.log("Remaining time: " + minutes + ":" + seconds);
+
+    let timer = document.getElementById("timer");
+    timer.innerHTML = minutes +":" + seconds;
+
+    timer.classList.remove("hidden");
+
+    let timer_interval = setInterval(function() {
+        total_time--;
+       let minutes = Math.floor(total_time/60);
+        let seconds = total_time%60;
+        if (seconds < 10) {
+            seconds = "0" + seconds;
+        }
+        console.log("Remaining time: " + minutes + ":" + seconds);
+
+        timer = document.getElementById("timer");
+        timer.innerHTML = minutes +":" + seconds;
+
+        if (total_time <= 0) {
+            alert("Time over!");
+            clearInterval(timer_interval);
+        }
+    }, 1000)
 };
 
 document.getElementById("start-btn").addEventListener("click", start_test);
