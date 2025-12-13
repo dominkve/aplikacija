@@ -1,5 +1,5 @@
 // test class
-class test {
+class Test {
     constructor(time, questions) {
         this.time = time;
         this.questions = questions;
@@ -114,36 +114,29 @@ class test {
     };
 };
 
-let questions = {
-    1: {
-        question: "Question 1?",
-        answers: {
-            0: "Answer A",
-            1: "Answer B",
-            2: "Answer C",
-            3: "Answer D",
-        },
-        correct_answer: "a",
-    },
-    2: {
-        question: "Question 2?",
-        answers: {
-            0: "Answer A",
-            1: "Answer B",
-            2: "Answer C",
-            3: "Answer D",
-        },
-        correct_answer: "b",
-    },
+async function fetch_data() {
+    console.log("Fetching data...")
+    let test_data = await fetch('data/test1.json')
+        .then(response => response.json())
+        .then(data => {
+        let test = data["test"];
+        console.log("Fetched: ")
+        console.log(test);
+        return test
+    });
+
+    return test_data;
 };
-let time = 0.1*60;
-
-const _test = new test(time, questions);
-
 
 // main function that runs when the test is started
-let start_test = function() {
-    console.log("Starting test.")
+async function start_test() {
+    console.log("Starting test...")
+
+    let test_data = await fetch_data();
+    console.log("Fetching over:")
+    console.log(test_data);
+    console.log("Creating the new Test object...")
+    const _test = new Test(test_data["time"], test_data["questions"]);
 
     _test.generate;
 
