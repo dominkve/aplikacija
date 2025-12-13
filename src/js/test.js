@@ -114,9 +114,13 @@ class Test {
     };
 };
 
-async function fetch_data() {
+async function fetch_data(test_index) {
     console.log("Fetching data...")
-    let test_data = await fetch('data/test1.json')
+
+    let path = "data/test" + test_index + ".json";
+    console.log("Test path is: " + path)
+    
+    let test_data = await fetch(path)
         .then(response => response.json())
         .then(data => {
         let test = data["test"];
@@ -130,11 +134,16 @@ async function fetch_data() {
 
 // main function that runs when the test is started
 async function start_test() {
-    console.log("Starting test...")
+    console.log("Retrieving test index...")
+    let test_index = localStorage.getItem("test_index");
 
-    let test_data = await fetch_data();
+    console.log("Starting test " + test_index + "...");
+
+    let test_data = await fetch_data(test_index);
+
     console.log("Fetching over:")
     console.log(test_data);
+
     console.log("Creating the new Test object...")
     const _test = new Test(test_data["time"], test_data["questions"]);
 
