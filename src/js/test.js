@@ -41,6 +41,7 @@ let start_test = function() {
 
         let answer_labels = clone.querySelectorAll(".question_answer");
         for (let answer_iterator = 0; answer_iterator < answer_labels.length; answer_iterator++) {
+            clone.getElementById("qn" + answer_iterator).setAttribute("name", "question_" + question_index);
             answer_labels[answer_iterator].innerHTML = test[question_index].answers[answer_iterator];
         }
 
@@ -77,6 +78,26 @@ let start_test = function() {
 
         if (total_time <= 0) {
             alert("Time over!");
+
+            let selected_value = null;
+            let correct_answers = 0;
+            for (let question_iterator = 1; question_iterator <= Object.keys(test).length; question_iterator++) {
+                let radios = document.querySelectorAll("input[name=question_" + question_iterator + "]"); 
+                console.log("Question: " + question_iterator)
+                console.log(radios);
+                selected_value = null;
+                for (let radio_iterator = 0; radio_iterator < radios.length; radio_iterator++) {
+                    console.log(radios[radio_iterator])
+                    if (radios[radio_iterator].checked) {
+                        console.log(radios[radio_iterator] + " was checked");
+                        selected_value = radios[radio_iterator].value;
+                    }
+                }
+
+                console.log("Selected:" + selected_value + " for question number " + question_iterator)
+                correct_answers += (selected_value == test[question_iterator].correct_answer);
+            }
+            console.log("Correct answers: " + correct_answers + "/" + Object.keys(test).length);
             clearInterval(timer_interval);
         }
     }, 1000)
