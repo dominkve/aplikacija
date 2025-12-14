@@ -92,7 +92,7 @@ class Test {
             console.log("Remaining time: " + minutes + ":" + seconds);
 
             timer = document.getElementById("timer");
-            timer.innerHTML = minutes +":" + seconds;
+            timer.innerHTML = minutes + ":" + seconds;
 
             if (total_time <= 0) {
                 time_over(timer_interval);
@@ -102,8 +102,15 @@ class Test {
 
     // function that executes when the time runs out
     time_over = function(timer_interval) {
-        alert("Time over!");
+        console.log("Time's up!")
 
+        console.log("Disabling radios...")
+        let radios = document.querySelectorAll('input[type="radio"');
+        for (let i = 0; i < radios.length; i++) {
+            radios[i].disabled = true;
+        }
+
+        console.log("Calculating score...");
         // checks answers
         let selected_value = null;
         let correct_answers = 0;
@@ -123,8 +130,13 @@ class Test {
             console.log("Selected:" + selected_value + " for question number " + question_iterator)
             correct_answers += (selected_value == this.questions[question_iterator].correct_answer);
         }
-        console.log("Correct answers: " + correct_answers + "/" + Object.keys(this.questions).length);
 
+        let score = correct_answers + "/" + Object.keys(this.questions).length;
+        console.log("Correct answers: " + score);
+
+        console.log("Displaying score...");
+        document.getElementById("score").innerHTML = score;
+        document.getElementById("score-container").classList.remove("hidden");
         // ends the timer
         clearInterval(timer_interval);
     };
