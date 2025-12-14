@@ -39,25 +39,22 @@ class Test {
 
         // loops over all the questions in the test object
         for (let question_index in this.questions) {
-            console.log(question_index);
-            console.log("Full question object:", this.questions[question_index]); // Debug: see the whole object
 
-            let template = document.getElementById("question_template");
-            let clone = template.content.cloneNode(true);
+            const question_data = this.questions[question_index];
+            const template = document.getElementById("question_template");
+            const clone = template.content.cloneNode(true);
+            const form = clone.querySelector(".question_form");
+            const title = clone.querySelector(".question_title");
+            const question = clone.querySelector(".question_question");
 
-            let question_form = clone.querySelector(".question_form");
-            question_form.id = "question_" + question_index;
+            form.id = "question_" + question_index;
+            title.textContent = "Question " + question_index;
+            question.innerHTML = question_data.question;
 
-            let question_title = clone.querySelector(".question_title");
-            question_title.innerHTML = "Question " + question_index;
-
-            let question_question = clone.querySelector(".question_question");
-            question_question.innerHTML = this.questions[question_index].question;
-
-            let answer_labels = clone.querySelectorAll(".question_answer");
-            for (let answer_iterator = 0; answer_iterator < answer_labels.length; answer_iterator++) {
-                clone.getElementById("qn" + answer_iterator).setAttribute("name", "question_" + question_index);
-                answer_labels[answer_iterator].innerHTML = this.questions[question_index].answers[answer_iterator];
+            const labels = clone.querySelectorAll(".question_answer");
+            for (let i = 0; i < labels.length; i++) {
+                clone.getElementById("qn" + i).setAttribute("name", "question_" + question_index);
+                labels[i].textContent = question_data.answers[i];
             }
 
             document.body.appendChild(clone);
