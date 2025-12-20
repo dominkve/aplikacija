@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // Add Firebase products that you want to use
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js';
 import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -10,9 +10,90 @@ import { firebaseConfig } from './config.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth();
+
+// Initialize auth providers
+const google = new GoogleAuthProvider();
+
 const db = getFirestore(app);
 console.log("Firestore initialized:", db.app.options.projectId);
+
+
+// A list of all methods
+const methodClass = {
+    email: {
+        signin: "email-signin-container",
+        signup: "email-signup-container",
+    },
+    google: {
+        signin: null,
+    }
+}
+
+// Attaches an event listener to all buttons
+let method = null;
+document.querySelectorAll('.method-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        method = this.getAttribute('data-method');
+        
+        // console.log("Selected method:", method);
+        displayMethod(method, "signin");
+    });
+});
+
+function displayMethod(method, action) {
+    // hides available methods
+    document.querySelector('.methods-container').classList.add('hidden');;
+
+    // hides any previous open forms
+    document.querySelectorAll(".method-form-container").forEach(container => {
+        container.classList.add('hidden');
+    });
+
+    if (method == "google") {
+        signInWithPopup(auth, google)
+        .then((result) => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            // The signed-in user info.
+            const user = result.user;
+            // IdP data available using getAdditionalUserInfo(result)
+            // ...
+        }).catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            const email = error.customData.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            // ...
+        });
+    } else {
+        // shows selected method container
+        document.getElementById(methodClass[method][action]).classList.remove('hidden');
+    }
+}
+
+document.getElementById('back-btn').addEventListener('click', function() {
+    event.preventDefault();
+
+    window.location.reload();
+});
+
+document.getElementById('signup-btn').addEventListener('click', function() {
+    event.preventDefault();
+
+    displayMethod(method, "signup");
+});
+
+document.getElementById('signin-btn').addEventListener('click', function() {
+    event.preventDefault();
+
+    displayMethod(method, "signin");
+});
 
 
 let signupListener = function(event) {

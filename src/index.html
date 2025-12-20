@@ -8,18 +8,20 @@
     <title>Aplikacija</title>
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/index.css">
-    <script type="module" src="js/auth.js"></script>
     <script type="module" src="js/signup.js"></script>
   </head>
   <body>
     <h1>Auth Page</h1>
+
+    <!-- Methods -->
     <div class="methods-container">
       <h2>Available methods</h2>
       <button class="method-btn" data-method="email">Email</button>
       <button class="method-btn" data-method="phone" hidden>Phone</button>
-      <button class="method-btn" data-method="google" hidden>Google</button>
+      <button class="method-btn" data-method="google">Google</button>
       <button class="method-btn" data-method="guest" hidden>Guest</button>
     </div>
+
     <div class="method-form-container hidden" id="email-signup-container" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
         <h2>SignUp</h2>
         <form id="signup-form">
@@ -46,6 +48,7 @@
           <button type="button" id="signin-btn">SignIn</button>
           <button type="button" id="back-btn" style="float: right;">Back</button>
     </div>
+
     <div class="method-form-container hidden" id="email-signin-container" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
         <h2>SignIn</h2>
         <form id="signin-form">
