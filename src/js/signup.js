@@ -19,18 +19,6 @@ const google = new GoogleAuthProvider();
 const db = getFirestore(app);
 console.log("Firestore initialized:", db.app.options.projectId);
 
-
-// A list of all methods
-const methodClass = {
-    email: {
-        signin: "email-signin-container",
-        signup: "email-signup-container",
-    },
-    google: {
-        signin: null,
-    }
-}
-
 // Attaches an event listener to all buttons
 let method = null;
 document.querySelectorAll('.method-btn').forEach(button => {
@@ -42,16 +30,39 @@ document.querySelectorAll('.method-btn').forEach(button => {
     });
 });
 
-function displayMethod(method, action) {
-    // hides available methods
-    document.querySelector('.methods-container').classList.add('hidden');;
+document.querySelector(".back-btn").addEventListener("click", () => {
+    event.preventDefault();
 
-    // hides any previous open forms
-    document.querySelectorAll(".method-form-container").forEach(container => {
-        container.classList.add('hidden');
-    });
+    window.location.reload();
+});
+
+document.querySelector(".signin-btn").addEventListener("click", () => {
+    event.preventDefault();
+
+    document.querySelector(".signin-btn").classList.add("hidden");
+
+    document.getElementById('email-form').removeEventListener('submit', signupListener);
+    displayMethod("email", "signin");
+});
+
+document.querySelector(".signup-btn").addEventListener("click", () => {
+    event.preventDefault();
+
+    document.querySelector(".signup-btn").classList.add("hidden");
+
+    document.getElementById('email-form').removeEventListener('submit', signinListener);
+    displayMethod("email", "signup");
+});
+
+function displayMethod(method, action) {
+    console.log("Hiding methods...")
+    // hides available methods
+    document.querySelector('.methods-container').classList.add('hidden');
+
+    console.log("Displaying form...");
 
     if (method == "google") {
+        console.log("Chosen provider is Google. Opening popup...")
         signInWithPopup(auth, google)
         .then((result) => {
             const user = result.user;
@@ -103,44 +114,60 @@ function displayMethod(method, action) {
             document.querySelector(".userdata-container").classList.add('hidden');
         });
     } else {
+        console.log("Chosen email.")
         // shows selected method container
-        document.getElementById(methodClass[method][action]).classList.remove('hidden');
+        if (action == "signin") {
+            console.log("Preparing email signin...");
+
+            let form = document.getElementById("form-container");
+            form.classList.remove("hidden");
+
+            document.getElementById("form-header").innerHTML = "Sign IN";
+            document.getElementById("email-form").classList.remove("hidden");
+
+            document.querySelector(".signup-btn").classList.remove("hidden");
+
+            document.querySelector(".back-btn").classList.remove("hidden");
+
+            document.getElementById('email-form').addEventListener('submit', signinListener);
+        } else if (action == "signup") {
+            console.log("Preparing email signup...");
+
+            let form = document.getElementById("form-container");
+            form.classList.remove("hidden");
+
+            document.getElementById("form-header").innerHTML = "Sign UP";
+            document.getElementById("email-form").classList.remove("hidden");
+
+            document.querySelector(".signin-btn").classList.remove("hidden");
+
+            document.querySelector(".back-btn").classList.remove("hidden");
+
+            document.getElementById('email-form').addEventListener('submit', signupListener);
+        } 
     }
 }
 
-let back_btns = document.querySelectorAll('.back-btn');
+let signinListener = function(event) {
+    event.preventDefault(); // Prevent the default form submission (page reload)
 
-for (let button of back_btns) {
-    button.addEventListener('click', function(event) {
-        event.preventDefault();
-        window.location.reload();
-    });
+    // Get email and password values from the form
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    signIn(email, password); // Call the signUp function with email and password
 }
-
-document.getElementById('signup-btn').addEventListener('click', function() {
-    event.preventDefault();
-
-    displayMethod(method, "signup");
-});
-
-document.getElementById('signin-btn').addEventListener('click', function() {
-    event.preventDefault();
-
-    displayMethod(method, "signin");
-});
-
 
 let signupListener = function(event) {
     event.preventDefault(); // Prevent the default form submission (page reload)
   
     // Get email and password values from the form
-    const email = document.getElementById('email1').value;
-    const password = document.getElementById('password1').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
   
     signUp(email, password); // Call the signUp function with email and password
 };
 
-document.getElementById('signup-form').addEventListener('submit', signupListener);
 
 function signUp(email, password) {
     createUserWithEmailAndPassword(auth, email, password)
@@ -150,13 +177,14 @@ function signUp(email, password) {
         console.log("User created:", user);
         
         // get the users username
-        document.getElementById('email-password').classList.add('hidden');
-        document.getElementById('signin-btn').classList.add('hidden');
-        document.getElementById('names-container').classList.remove('hidden');
+        document.getElementById('email-form').classList.add('hidden');
+        document.querySelector('.signin-btn').classList.add('hidden');
 
-        document.getElementById('signup-form').removeEventListener('submit', signupListener);
+        document.getElementById('names-form').classList.remove('hidden');
 
-        document.getElementById('signup-form').addEventListener('submit', async function(event) {
+        document.getElementById('email-form').removeEventListener('submit', signupListener);
+
+        document.getElementById('names-form').addEventListener('submit', async function(event) {
             event.preventDefault();
 
             const username = document.getElementById('username').value;
@@ -202,15 +230,6 @@ function signUp(email, password) {
     });
 };
 
-document.getElementById('signin-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the default form submission (page reload)
-  
-    // Get email and password values from the form
-    const email = document.getElementById('email2').value;
-    const password = document.getElementById('password2').value;
-  
-    signIn(email, password); // Call the signUp function with email and password
-});
 
 function signIn(email, password) {
     signInWithEmailAndPassword(auth, email, password)

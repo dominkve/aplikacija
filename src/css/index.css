@@ -11,6 +11,10 @@ body {
     gap: 10px; /* Adds consistent spacing between buttons */
 }
 
+.form-container {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
 .method-btn {
     padding: 12px 24px;
     background-color: #007bff;
@@ -26,4 +30,8 @@ body {
 
 .method-btn:hover {
     background-color: #0056b3;
+}
+
+.back-btn {
+    float: right;
 }

@@ -22,62 +22,45 @@
       <button class="method-btn" data-method="guest" hidden>Guest</button>
     </div>
 
-    <div class="method-form-container hidden" id="email-signup-container" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
-        <h2>SignUp</h2>
-        <form id="signup-form">
-            <div class="hidden" id="names-container">
-              <label for="username">Username</label>
-              <input type="text" id="username">
-              <label for="name">Name</label>
-              <input type="text" id="name">
-              <label for="surname">Surrname</label>
-              <input type="text" id="surname">
-            </div>
-            <div id="email-password">
-              <div>
-                <label for="email">Email</label>
-                <input type="email" id="email1" name="email1" required>
-              </div>
-              <div>
-                <label for="password">lozinka</label>
-                <input type="password" id="password1" name="password1" required>
-              </div>
-            </div>
-            <button type="submit">Continue</button>
-          </form>
-          <button type="button" id="signin-btn">SignIn</button>
-          <button type="button" class="back-btn" style="float: right;">Back</button>
-    </div>
+    <!-- Forms -->
+    <div id="form-container" class="form-container hidden">
+      <h2 id="form-header">Form Header</h2>
 
-    <div class="method-form-container hidden" id="email-signin-container" style="box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);">
-        <h2>SignIn</h2>
-        <form id="signin-form">
+      <form id="email-form" class="hidden">
+        <div id="email-password">
             <div>
               <label for="email">Email</label>
-              <input type="email" id="email2" name="email2" required>
+              <input type="email" id="email" name="email" required>
             </div>
             <div>
               <label for="password">lozinka</label>
-              <input type="password" id="password2" name="password2" required>
+              <input type="password" id="password" name="password" required>
             </div>
-            <button type="submit">Continue</button>
-          </form>
-          <button type="button" id="signup-btn">SignUp</button>
-          <button type="button" class="back-btn" style="float: right;">Back</button>
-    </div>
-
-    <div class="userdata-container hidden">
-      <form id="names-form">
-        <div id="names">
-            <label for="usernameg">Username</label>
-            <input type="text" id="usernameg">
-            <label for="nameg">Name</label>
-            <input type="text" id="nameg">
-            <label for="surnameg">Surrname</label>
-            <input type="text" id="surnameg">
         </div>
         <button type="submit">Continue</button>
       </form>
+
+      <form id="names-form" class="hidden">
+        <div id="names">
+          <div>
+            <label for="username">Username</label>
+            <input type="text" id="username">
+          </div>
+          <div>
+            <label for="name">Name</label>
+            <input type="text" id="name">
+          </div>
+          <div>
+            <label for="surname">Surrname</label>
+            <input type="text" id="surname">
+          </div>
+        </div>
+        <button type="submit">Continue</button>
+      </form>
+
+      <button type="button" class="signin-btn hidden">Sign IN</button>
+      <button type="button" class="signup-btn hidden">Sign UP</button>
+      <button type="button" class="back-btn hidden">BACK</button>
     </div>
   </body>
 </html>
