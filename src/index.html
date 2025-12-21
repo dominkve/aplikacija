@@ -13,8 +13,13 @@
   <body>
     <h1>Auth Page</h1>
 
+    <!-- Displays while everything else loads. -->
+    <div class="loading">
+      <h1 class="loading">Loading...</h1>
+    </div>
+
     <!-- Methods -->
-    <div class="methods-container">
+    <div class="methods-container hidden">
       <h2>Available methods</h2>
       <button class="method-btn" data-method="email">Email</button>
       <button class="method-btn" data-method="phone" hidden>Phone</button>

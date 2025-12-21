@@ -8,6 +8,7 @@ import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/12
 
 import { firebaseConfig } from './config.js';
 
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
@@ -29,6 +30,10 @@ document.querySelectorAll('.method-btn').forEach(button => {
         displayMethod(method, "signin");
     });
 });
+
+// hides the loading text when everything is loaded and displays the methods container
+document.querySelector(".loading").classList.add("hidden");
+document.querySelector(".methods-container").classList.remove("hidden");
 
 document.querySelector(".back-btn").addEventListener("click", () => {
     event.preventDefault();
