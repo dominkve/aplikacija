@@ -36,7 +36,10 @@ let stop_loading_screen = function() {
     document.querySelector(".methods-container").classList.remove("hidden");
 };
 
-
+let loading_screen = function() {
+    document.querySelector(".loading").classList.remove("hidden");
+    document.querySelector(".methods-container").classList.add("hidden");
+}
 // Handle the redirect result
 getRedirectResult(auth)
     .then((result) => {
@@ -177,7 +180,7 @@ let update_firebase_profile = function(username, photoURL, user,
 /** Handle google login with redirect (iOS compatible). */
 let googleLogin = function() {
     console.log("Chosen provider is Google. Using redirect...")
-
+    loading_screen();       // hide methods while redirect ongoing
     // Start the sign-in with redirect
     signInWithRedirect(auth, google);
 }
