@@ -1,4 +1,3 @@
-// test class
 class Test {
     // Static property to hold the single instance
     static #instance = null;
