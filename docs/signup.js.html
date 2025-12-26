@@ -30,7 +30,16 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // Add Firebase products that you want to use
-import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js';
+import { 
+    getAuth, 
+    GoogleAuthProvider, 
+    signInWithPopup, 
+    signInWithRedirect,
+    getRedirectResult,
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    updateProfile
+} from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js';
 import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -48,6 +57,56 @@ const google = new GoogleAuthProvider();
 const db = getFirestore(app);
 console.log("Firestore initialized:", db.app.options.projectId);
 
+/** hides the loading text when everything is loaded and displays the methods container */
+let stop_loading_screen = function() {
+    document.querySelector("#load").classList.add("hidden");
+    document.querySelector(".methods-container").classList.remove("hidden");
+};
+/** Starts the loading screen. */
+let loading_screen = function() {
+    document.querySelector("#load").classList.remove("hidden");
+    document.querySelector(".methods-container").classList.add("hidden");
+}
+/**
+ * Check for redirect and handle
+ * @param {auth} auth   - initialized firebase auth object
+ */
+getRedirectResult(auth)
+    .then((result) => {
+        console.log("Page loading... Checking for any redirects...")
+        if (result) {
+            console.log("Redirect detected.")
+            const user = result.user;
+            console.log("Google user signed in:", user);
+            
+            // Get Google profile data
+            const displayName = user.displayName || "";
+            const email = user.email;
+            const photoURL = user.photoURL || "";
+            
+            // Extract first/last name from displayName
+            let firstName = "";
+            let lastName = "";
+            if (displayName) {
+                const nameParts = displayName.split(' ');
+                firstName = nameParts[0] || "";
+                lastName = nameParts.slice(1).join(' ') || "";
+            }
+            
+            // Generate username from email
+            const username = email.split('@')[0];
+            
+            update_firebase_profile(username, photoURL, user, firstName, lastName, email);
+        } else {
+            console.log("No redirect. Continue normally...");
+            stop_loading_screen();
+        }
+    })
+    .catch((error) => {
+        console.error("Google redirect sign-in error:", error);
+    });
+
+
 /** Attaches an event listener to all buttons in the methods form. */
 let init_methods_form = function() {
     let method = null;
@@ -62,21 +121,17 @@ let init_methods_form = function() {
 };
 init_methods_form();
 
-/** hides the loading text when everything is loaded and displays the methods container */
-let stop_loading_screen = function() {
-    document.querySelector(".loading").classList.add("hidden");
-    document.querySelector(".methods-container").classList.remove("hidden");
-};
-stop_loading_screen();
 
 /** Initialize all buttons with their event handlers. */
 let init_buttons = function() {
+    // button that takes the user back
     document.querySelector(".back-btn").addEventListener("click", () => {
         event.preventDefault();
 
         window.location.reload();
     });
 
+    // button that switches the action to sign in
     document.querySelector(".signin-btn").addEventListener("click", () => {
         event.preventDefault();
 
@@ -86,6 +141,7 @@ let init_buttons = function() {
         displayMethod("email", "signin");
     });
 
+    // button that switches the action to sign up
     document.querySelector(".signup-btn").addEventListener("click", () => {
         event.preventDefault();
 
@@ -151,7 +207,18 @@ let update_firebase_profile = function(username, photoURL, user,
         console.error("Error saving Google user data:", error);
     });
 }
+
+/** Handle google login with redirect (iOS compatible). */
+let googleLogin = function() {
+    console.log("Chosen provider is Google. Using redirect...")
+    loading_screen();       // hide methods while redirect ongoing
+    // Start the sign-in with redirect
+    signInWithRedirect(auth, google);
+}
+/* ===================================== */
+/* TEMPORARILY DISABLED TO TEST REDIRECT */
 /** Handle google popup login. */
+/*
 let googleLogin = function() {
     console.log("Chosen provider is Google. Opening popup...")
     signInWithPopup(auth, google)
@@ -185,41 +252,59 @@ let googleLogin = function() {
         document.querySelector(".userdata-container").classList.add('hidden');
     });
 }
+*/
+/* ========================================= */
 
+/** Prepares the email signin form. */
+function prepare_email_signin() {
+    let form = document.getElementById("form-container");
+    form.classList.remove("hidden");
+
+    document.getElementById("form-header").innerHTML = "Sign IN";
+    document.getElementById("email-form").classList.remove("hidden");
+
+    document.querySelector(".signup-btn").classList.remove("hidden");
+
+    document.querySelector(".back-btn").classList.remove("hidden");
+
+    document.getElementById('email-form').addEventListener('submit', signinListener);
+};
+
+/** Prepares the email signup form. */
+function prepare_email_signup() {
+    let form = document.getElementById("form-container");
+    form.classList.remove("hidden");
+
+    document.getElementById("form-header").innerHTML = "Sign UP";
+    document.getElementById("email-form").classList.remove("hidden");
+
+    document.querySelector(".signin-btn").classList.remove("hidden");
+
+    document.querySelector(".back-btn").classList.remove("hidden");
+
+    document.getElementById('email-form').addEventListener('submit', signupListener);
+};
+
+/**
+ * Handles login with email method.
+ * @param {string} action   - Chosen email login action.
+ */
 let emailLogin = function(action) {
-    console.log("Chosen email.")
-        // shows selected method container
-        if (action == "signin") {
-            console.log("Preparing email signin...");
-
-            let form = document.getElementById("form-container");
-            form.classList.remove("hidden");
-
-            document.getElementById("form-header").innerHTML = "Sign IN";
-            document.getElementById("email-form").classList.remove("hidden");
-
-            document.querySelector(".signup-btn").classList.remove("hidden");
-
-            document.querySelector(".back-btn").classList.remove("hidden");
-
-            document.getElementById('email-form').addEventListener('submit', signinListener);
-        } else if (action == "signup") {
-            console.log("Preparing email signup...");
-
-            let form = document.getElementById("form-container");
-            form.classList.remove("hidden");
-
-            document.getElementById("form-header").innerHTML = "Sign UP";
-            document.getElementById("email-form").classList.remove("hidden");
-
-            document.querySelector(".signin-btn").classList.remove("hidden");
-
-            document.querySelector(".back-btn").classList.remove("hidden");
-
-            document.getElementById('email-form').addEventListener('submit', signupListener);
-        } 
+    console.log("Chosen email method.")
+    // shows selected method container
+    if (action == "signin") {
+        console.log("Preparing email signin...");
+        prepare_email_signin();
+    } else if (action == "signup") {
+        console.log("Preparing email signup...");
+        prepare_email_signup();
+    } 
 }
 
+/**
+ * Read email and password and then sign in user.
+ * @param {event} event         - yeah idk
+ */
 let signinListener = function(event) {
     event.preventDefault(); // Prevent the default form submission (page reload)
 
@@ -230,6 +315,10 @@ let signinListener = function(event) {
     signIn(email, password); // Call the signUp function with email and password
 }
 
+/**
+ * Read email and password and then signup user.
+ * @param {event} event 
+ */
 let signupListener = function(event) {
     event.preventDefault(); // Prevent the default form submission (page reload)
   
@@ -240,7 +329,11 @@ let signupListener = function(event) {
     signUp(email, password); // Call the signUp function with email and password
 };
 
-
+/**
+ * create firebase user with firebase sdk
+ * @param {string} email 
+ * @param {string} password 
+ */
 function signUp(email, password) {
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
@@ -261,48 +354,27 @@ function signUp(email, password) {
 
             const username = document.getElementById('username').value;
             console.log("Username entered:", username);
-            updateProfile(auth.currentUser, {
-                displayName: username,
-            }).then(() => {
-                console.log("Username set to: ", auth.currentUser.displayName);
-            }).catch((error) => {
-                console.error("Error updating profile:", error);
-            });
 
             let name = document.getElementById('name').value;
             let surname = document.getElementById('surname').value;
 
             console.log("Name:", name, "Surname:", surname);
 
-            console.log("User UID:", user.uid);
-            const strinf = String(user.uid);
-            const userRef = doc(db, "users", strinf);
-
-            // Add user details to Firestore
-            setDoc(userRef, {
-                first: name,
-                last: surname,
-            })
-            .then((userRef) => {
-                console.log("Document written with ID: ", user.uid);
-                window.location.assign("main.html");
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
-        
-        // ...
+            update_firebase_profile(username, null, user, name, surname, email);
         });
     })
     .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error("Error code:", errorCode, "Error message:", errorMessage);
-    // ..
     });
 };
 
-
+/**
+ * Sign in user using firebase sdk.
+ * @param {string} email 
+ * @param {string} password 
+ */
 function signIn(email, password) {
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
@@ -327,13 +399,13 @@ function signIn(email, password) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#displayMethod">displayMethod</a></li><li><a href="global.html#googleLogin">googleLogin</a></li><li><a href="global.html#init_buttons">init_buttons</a></li><li><a href="global.html#init_methods_form">init_methods_form</a></li><li><a href="global.html#stop_loading_screen">stop_loading_screen</a></li><li><a href="global.html#update_firebase_profile">update_firebase_profile</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#displayMethod">displayMethod</a></li><li><a href="global.html#emailLogin">emailLogin</a></li><li><a href="global.html#googleLogin">googleLogin</a></li><li><a href="global.html#init_buttons">init_buttons</a></li><li><a href="global.html#init_methods_form">init_methods_form</a></li><li><a href="global.html#loading_screen">loading_screen</a></li><li><a href="global.html#prepare_email_signin">prepare_email_signin</a></li><li><a href="global.html#prepare_email_signup">prepare_email_signup</a></li><li><a href="global.html#signIn">signIn</a></li><li><a href="global.html#signUp">signUp</a></li><li><a href="global.html#signinListener">signinListener</a></li><li><a href="global.html#signupListener">signupListener</a></li><li><a href="global.html#stop_loading_screen">stop_loading_screen</a></li><li><a href="global.html#test_handler">test_handler</a></li><li><a href="global.html#update_firebase_profile">update_firebase_profile</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Fri Dec 26 2025 02:05:15 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Fri Dec 26 2025 23:11:33 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
