@@ -4,6 +4,10 @@ import { firebaseConfig } from './config.js';
 
 const app = initializeApp(firebaseConfig);
 
+/**
+ * Describes the each test with it's own index.
+ * @param {Number} test_index   - index of a test
+ */
 let test_handler = function (test_index) {
     localStorage.setItem("test_index", test_index);
     window.location.assign("./test.html");

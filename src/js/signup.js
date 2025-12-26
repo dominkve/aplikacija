@@ -31,12 +31,12 @@ console.log("Firestore initialized:", db.app.options.projectId);
 
 /** hides the loading text when everything is loaded and displays the methods container */
 let stop_loading_screen = function() {
-    document.querySelector(".loading").classList.add("hidden");
+    document.querySelector("#load").classList.add("hidden");
     document.querySelector(".methods-container").classList.remove("hidden");
 };
 /** Starts the loading screen. */
 let loading_screen = function() {
-    document.querySelector(".loading").classList.remove("hidden");
+    document.querySelector("#load").classList.remove("hidden");
     document.querySelector(".methods-container").classList.add("hidden");
 }
 /**

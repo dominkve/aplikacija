@@ -27,7 +27,7 @@ onAuthStateChanged(auth, async (user) => {
         spol = data.spol;
       }
 
-      const infoEl = document.getElementById("user-info");
+      const infoEl = document.querySelector("#user-info p");
       infoEl.innerHTML = 
             `Ime i prezime: ${punoIme} || ` +
             `Godine: ${godine || "-"} || ` +
