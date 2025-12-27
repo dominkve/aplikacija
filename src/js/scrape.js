@@ -8,41 +8,47 @@ fetch("./data/ucilista.json")
         console.log(data);
         ucilista = data;
         let selectUcilista = document.getElementById("Ucilista");
+        let selectSastavnice = document.getElementById("Sastavnice");
 
         // add default option
         let option = new Option('Sva visoka učilišta', "-1");
         selectUcilista.add(option);
+        option = new Option('Sve sastavnice', "-1");
+        selectSastavnice.add(option);
 
+        let id = null;
         let name = null;
-        let index = 1;
+        let uciliste_index = 1;
+        let sastavnica_index = 1;
         for (let uciliste in ucilista) {
             console.log(uciliste);
             name = ucilista[uciliste].name;
             
             console.log("Name and id: ", name, uciliste);
             option = new Option(name, uciliste);
-            selectUcilista.add(option, index++);
-            /*
-            // let sastavnice = ucilista[uciliste].sastavnice;
-            // console.log(sastavnice);
+            selectUcilista.add(option, uciliste_index++);
+            let sastavnice = ucilista[uciliste].sastavnice;
             for (let sastavnica in sastavnice) {
                 console.log(sastavnice[sastavnica]);
                 id = sastavnice[sastavnica].id;
                 name = sastavnice[sastavnica].name;
-                option = new Option(name, value);
-                selectUcilista.add(option);
+                console.log("Sastavnica name and id:", name, id)
+                option = new Option(name, id);
+                selectSastavnice.add(option, sastavnica_index++);
             }
-            */
-            }
+        }
         document.getElementById("search-btn").addEventListener("click", scrapePrograms);
         document.getElementById("VrstaUcilista").addEventListener("change", function () {
             let vrsta = document.getElementById("VrstaUcilista").value;
-            console.log("Selected vrsta: ", vrsta);
+            console.log("========================================= \n \
+                Selected vrsta: ", vrsta,
+            "\n ============================================= \n");
 
             let selectUcilista = document.getElementById("Ucilista");
+            let selectSastavnice = document.getElementById("Sastavnice");
             // clear select element
             selectUcilista.innerHTML = "";
-
+            selectSastavnice.innerHTML = "";
             let ucilista_vrsta = null;
             // Find the new elements by vrsta
             if (vrsta == -1) {
@@ -56,31 +62,32 @@ fetch("./data/ucilista.json")
             console.log("Ucilista i sastavnice:");
             console.log(ucilista_vrsta);
 
-            // add default option
+            // add default options
             let option = new Option('Sva visoka učilišta', "-1");
             selectUcilista.add(option);
-
+            option = new Option('Sve sastavnice', "-1");
+            selectSastavnice.add(option);
             let id = null;
             let name = null;
-            let index = 1;
+            let uciliste_index = 1;
+            let sastavnica_index = 1;
             for (let uciliste in ucilista_vrsta) {
                 console.log(uciliste);
                 name = ucilista_vrsta[uciliste].name;
                 
                 console.log("Name and id: ", name, uciliste);
                 option = new Option(name, uciliste);
-                selectUcilista.add(option, index++);
-                /*
-                // let sastavnice = ucilista[uciliste].sastavnice;
-                // console.log(sastavnice);
+                selectUcilista.add(option, uciliste_index++);
+                let sastavnice = ucilista_vrsta[uciliste].sastavnice;
+                console.log(sastavnice);
                 for (let sastavnica in sastavnice) {
                     console.log(sastavnice[sastavnica]);
                     id = sastavnice[sastavnica].id;
                     name = sastavnice[sastavnica].name;
-                    option = new Option(name, value);
-                    selectUcilista.add(option);
+                    console.log("Sastavnica name and id:", name, id)
+                    option = new Option(name, id);
+                    selectSastavnice.add(option, sastavnica_index++);
                 }
-                */
             }
         });
     });
