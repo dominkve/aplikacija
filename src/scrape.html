@@ -457,17 +457,64 @@
                 </select>
             </li>
         </ul>
+        <button id="search-btn">Search</button>
     </div>
     <script type="module">
         let ucilista = null;
+        console.log("Fetching ucilista.json");
         fetch("./data/ucilista.json")
-            .then(response => response.json())
+            .then(response => {
+                return response.json()
+            })
             .then(data => {
                 console.log(data);
                 ucilista = data;
-                document.getElementById("VrstaUcilista").addEventListener("change", scrapePrograms);
-            });
+                document.getElementById("search-btn").addEventListener("click", scrapePrograms);
+                document.getElementById("VrstaUcilista").addEventListener("change", function () {
+                    let vrsta = document.getElementById("VrstaUcilista").value;
+                    console.log("Selected vrsta: ", vrsta);
 
+                    let selectUcilista = document.getElementById("Ucilista");
+                    // clear select element
+                    selectUcilista.innerHTML = "";
+
+                    // Find the new elements by vrsta
+                    let ucilista_vrsta = Object.fromEntries(
+                        Object.entries(ucilista).filter(([id, uciliste]) => uciliste.vrsta == vrsta)
+                    );
+
+                    console.log("Ucilista i sastavnice:");
+                    console.log(ucilista_vrsta);
+
+                    // add default option
+                    let option = new Option('Sva visoka učilišta', "-1");
+                    selectUcilista.add(option);
+
+                    let id = null;
+                    let name = null;
+                    let index = 1;
+                    for (let uciliste in ucilista_vrsta) {
+                        console.log(uciliste);
+                        name = ucilista_vrsta[uciliste].name;
+                        
+                        console.log("Name and id: ", name, uciliste);
+                        option = new Option(name, uciliste);
+                        selectUcilista.add(option, index++);
+                        /*
+                        // let sastavnice = ucilista[uciliste].sastavnice;
+                        // console.log(sastavnice);
+                        for (let sastavnica in sastavnice) {
+                            console.log(sastavnice[sastavnica]);
+                            id = sastavnice[sastavnica].id;
+                            name = sastavnice[sastavnica].name;
+                            option = new Option(name, value);
+                            selectUcilista.add(option);
+                        }
+                        */
+                    }
+                });
+            });
+        
         async function scrapePrograms() {
             const proxy = 'https://corsproxy.io/?url=';
             const url = "https://www.postani-student.hr/webservices/Pretraga.svc/PretraziPrograme";
