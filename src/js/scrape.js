@@ -13,11 +13,11 @@ function add_default_options(selectUcilista, selectSastavnice) {
 
 /**
  * Add options, filter by vrsta (-1 is all), to the Ucilista and Sastavnice select elements.
- * @param {*} selectUcilista    - The select element for ucilista. 
- * @param {*} selectSastavnice  - The select element for sastavnice.
- * @param {*} ucilista          - An json object containing all of the ucilista, their ids,
+ * @param {HTMLSelectElement} selectUcilista    - The select element for ucilista. 
+ * @param {HTMLSelectElement} selectSastavnice  - The select element for sastavnice.
+ * @param {object} ucilista          - An json object containing all of the ucilista, their ids,
  *                                  names, and the same info for all of their sastavnice
- * @param {*} vrsta             - Vrsta ucilista, -1 is the default (all options), look at the first
+ * @param {number} vrsta             - Vrsta ucilista, -1 is the default (all options), look at the first
  *                                  select element in scrape.html for other options and their values.
  */
 function add_options(selectUcilista, selectSastavnice, ucilista, vrsta) {
@@ -65,8 +65,8 @@ function add_options(selectUcilista, selectSastavnice, ucilista, vrsta) {
 
 /**
  * Clears options from select elements for ucilista and sastavnice.
- * @param {*} selectUcilista    - Select element for ucilista.
- * @param {*} selectSastavnice  - Select element for sastavnice.
+ * @param {HTMLSelectElement} selectUcilista    - Select element for ucilista.
+ * @param {HTMLSelectElement} selectSastavnice  - Select element for sastavnice.
  */
 function clear_options(selectUcilista, selectSastavnice) {
     // clear select element
@@ -83,6 +83,7 @@ fetch("./data/ucilista.json")
     .then(data => {
         console.log(data);
         ucilista = data;
+
         let selectUcilista = document.getElementById("Ucilista");
         let selectSastavnice = document.getElementById("Sastavnice");
 
@@ -102,6 +103,9 @@ fetch("./data/ucilista.json")
             
             add_options(selectUcilista, selectSastavnice, ucilista, vrsta);
         });
+    })
+    .catch (error => {
+        console.error("Error fetching: ", error);
     });
 
 async function scrapePrograms() {
