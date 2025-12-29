@@ -14,6 +14,26 @@ function add_default_options(selectUcilista, selectSastavnice) {
 }
 
 /**
+ * Filters the ucilista object by vrsta ucilista.   
+ * @param {number} vrsta    - vrsta ucilista
+ * @param {object} ucilista - An object containing ucilista and their vrsta alongside
+ * other info.
+ * @returns {object} - ucilista filtered by vrsta
+ */
+function filter_by_vrsta(vrsta, ucilista) {
+    // If vrsta == -1 (default) show all options, otherwise filter by vsta
+    if (vrsta == -1) {
+        console.log("Adding all options...")
+        return ucilista;
+    } else {
+        console.log("Adding only options of the vrsta: ", vrsta);
+        return  Object.fromEntries(
+            Object.entries(ucilista).filter(([id, uciliste]) => uciliste.vrsta == vrsta)
+        )
+    }
+}
+
+/**
  * Add options, filter by vrsta (-1 is all), to the Ucilista and Sastavnice select elements.
  * @param {HTMLSelectElement} selectUcilista    - The select element for ucilista. 
  * @param {HTMLSelectElement} selectSastavnice  - The select element for sastavnice.
@@ -26,17 +46,7 @@ function add_options(selectUcilista, selectSastavnice, ucilista, vrsta) {
     console.log("Adding options...");
     add_default_options(selectUcilista, selectSastavnice);
 
-    let ucilista_vrsta = null;
-    // If vrsta == -1 (default) show all options, otherwise filter by vsta
-    if (vrsta == -1) {
-        console.log("Adding all options...")
-        ucilista_vrsta = ucilista;
-    } else {
-        console.log("Adding only options of the vrsta: ", vrsta);
-        ucilista_vrsta =  Object.fromEntries(
-            Object.entries(ucilista).filter(([id, uciliste]) => uciliste.vrsta == vrsta)
-        )
-    }
+    let ucilista_vrsta = filter_by_vrsta(vrsta, ucilista);
 
     let option, id, name = null;
     let uciliste_index, sastavnica_index = 1;
@@ -110,8 +120,6 @@ fetch("./data/ucilista.json")
     .catch (error => {
         console.error("Error fetching: ", error);
     });
-
-
 
 const url = "https://www.postani-student.hr/webservices/Pretraga.svc/PretraziPrograme";
 const proxy = 'https://corsproxy.io/?url=';
@@ -221,7 +229,93 @@ function make_payload_lista(ucilista) {
     return lista;
 }
 
-let TotalPages = null;
+function clean_programi() {
+    let table = document.getElementById("programi-table");
+    let rows = table.querySelectorAll("tr");
+
+    for (let i=1; i < rows.length; i++) {
+        rows[i].remove();
+    }
+}
+
+/**
+ * Popuplates the programi table with scraped programi data for a single page.
+ * @param {*} data - the (`response.data.d) object from the response to the axios post request.
+ */
+function populate_programi(data) {
+    let programi_table = document.getElementById("programi-table");
+    let programi = data.Programi;
+
+    for (let program in programi) {
+        let new_row = programi_table.insertRow(-1);
+
+        let cell = new_row.insertCell(0);
+        cell.innerHTML = programi[program].naziv;
+
+        cell = new_row.insertCell(1);
+        cell.innerHTML = programi[program].mjesto;
+
+        cell = new_row.insertCell(2);
+        cell.innerHTML = programi[program].programi;
+    }
+}
+
+/**
+ * Updates the payload to select the next page, that is next batch of programs.
+ */
+function next_page() {
+    payload.page++;
+    scrapePrograms();
+}
+
+function previous_page() {
+    payload.page--;
+    scrapePrograms();
+}
+
+function show_next_button() {
+    document.querySelectorAll(".next-btn").forEach(button => {
+        button.classList.remove("hidden");
+    });
+}
+
+function hide_next_button() {
+    document.querySelectorAll(".next-btn").forEach(button => {
+        button.classList.add("hidden");
+    });
+}
+
+// having a previous and a next button that are almost identical, seems redundant
+function show_previous_button() {
+    document.querySelectorAll(".previous-btn").forEach(button => {
+        button.classList.remove("hidden");
+    });
+}
+
+function hide_previous_button() {
+    document.querySelectorAll(".previous-btn").forEach(button => {
+        button.classList.add("hidden");
+    });
+}
+
+
+function pager(data) {
+    document.getElementById("page-number").innerHTML = "Trenutna stranica:" +
+        data.CurrentPage + " od " + data.TotalPages;
+
+    if (data.CurrentPage == 1) {
+        hide_previous_button();
+        show_next_button();
+    } else if (data.CurrentPage < data.TotalPages) {
+        show_next_button();
+        show_previous_button();
+    } else {
+        hide_next_button();
+        show_previous_button();
+    }
+
+}
+
 /**
  * Scrape programs data from postani-student.hr using axios.
  */
@@ -240,29 +334,23 @@ async function scrapePrograms() {;
             console.log(response.data);
 
             let data = response.data.d;
-            
-            document.getElementById("page-number").innerHTML = "Trenutna stranica:" +
-                data.CurrentPage + " od " + data.TotalPages;
-
-            let programi_table = document.getElementById("programi-table");
-            let programi = data.Programi;
-
-            for (let program in programi) {
-                let new_row = programi_table.insertRow(-1);
-
-                let cell = new_row.insertCell(0);
-                cell.innerHTML = programi[program].naziv;
-
-                cell = new_row.insertCell(1);
-                cell.innerHTML = programi[program].mjesto;
-
-                cell = new_row.insertCell(2);
-                cell.innerHTML = programi[program].programi;
-            }
-
+            clean_programi();
+            populate_programi(data);
             document.getElementById("programi-container").classList.remove("hidden");
+
+            pager(data);
+
         })
     } catch (error) {
         console.log(error);
     }
 }
+
+document.querySelectorAll(".next-btn").forEach(button => {
+    button.addEventListener("click", next_page);
+});
+
+
+document.querySelectorAll(".previous-btn").forEach(button => {
+    button.addEventListener("click", previous_page);
+});

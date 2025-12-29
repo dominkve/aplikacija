@@ -16,3 +16,11 @@
 #programi-table table, th, td {
     border: 1px solid;
 }
+
+.next-btn {
+    float: right;
+}
+
+.previous-btn {
+    float: left;
+}
