@@ -104,7 +104,7 @@ let init_buttons = function() {
     });
 
     // button that switches the action to sign in
-    document.querySelector(".signin-btn").addEventListener("click", () => {
+    document.querySelector(".signin-btn").addEventListener("click", (event) => {
         event.preventDefault();
 
         document.querySelector(".signin-btn").classList.add("hidden");
@@ -114,7 +114,7 @@ let init_buttons = function() {
     });
 
     // button that switches the action to sign up
-    document.querySelector(".signup-btn").addEventListener("click", () => {
+    document.querySelector(".signup-btn").addEventListener("click", (event) => {
         event.preventDefault();
 
         document.querySelector(".signup-btn").classList.add("hidden");
@@ -232,9 +232,11 @@ function prepare_email_signin() {
     let form = document.getElementById("form-container");
     form.classList.remove("hidden");
 
-    document.getElementById("form-header").innerHTML = "Sign IN";
-    document.getElementById("email-form").classList.remove("hidden");
+    document.getElementById("form-header").innerHTML = "Sign-in";
+    document.getElementById("password").setAttribute("autocomplete", "current-password");
 
+    document.getElementById("email-form").classList.remove("hidden");
+    
     document.querySelector(".signup-btn").classList.remove("hidden");
 
     document.querySelector(".back-btn").classList.remove("hidden");
@@ -247,7 +249,9 @@ function prepare_email_signup() {
     let form = document.getElementById("form-container");
     form.classList.remove("hidden");
 
-    document.getElementById("form-header").innerHTML = "Sign UP";
+    document.getElementById("form-header").innerHTML = "Sign-up";
+    document.getElementById("password").setAttribute("autocomplete", "new-password");
+
     document.getElementById("email-form").classList.remove("hidden");
 
     document.querySelector(".signin-btn").classList.remove("hidden");

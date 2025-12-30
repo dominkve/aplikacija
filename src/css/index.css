@@ -1,7 +1,5 @@
-body { 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+input {
+    width: 200px;
 }
 
 .methods-container {
@@ -11,7 +9,14 @@ body {
     gap: 10px; /* Adds consistent spacing between buttons */
 }
 
+.methods-container h2 {
+    margin-bottom: 20px;
+}
+
 .form-container {
+    max-width: 400px;
+    margin: auto;
+    margin: auto;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     padding: 0% 5% 5% 5%;
     border-radius: 5%;
@@ -23,22 +28,32 @@ body {
 }
 
 #email-form {
-    margin-bottom: 10%;
+    margin-bottom: 3%;
 }
 
-#email-password {
-    margin: 5% 0% 5% 0;
+#email-form button[type="submit"] {
+    margin-top: 10px;
+}
+
+#email-form div label {
+    display: inline-block;
+    width: 65px;
+}
+
+form#names-form.auth-form div label {
+    display: inline-block;
+    width: 85px;
 }
 
 .method-btn {
-    padding: 3% 6%;
+    padding: 1.5%;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
-    width: 200px; /* Optional: makes all buttons same width */
+    font-size: large;
+    width: 200px; 
     text-align: center;
     transition: background-color 0.3s;
 }

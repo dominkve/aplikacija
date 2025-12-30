@@ -3,66 +3,70 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" type="image/x-icon" href="../public/favicon.ico"/>
+    
     <title>Aplikacija</title>
+
+    <link rel="icon" type="image/x-icon" href="../public/favicon.ico"/>
+
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/index.css">
+
     <script type="module" src="js/signup.js"></script>
   </head>
   <body>
-    <h1>Auth Page</h1>
-    <!-- Displays while everything else loads. -->
-    <p id="load" class="">Loading&hellip;</p>
+    <div class="container">
+      <div class="title">
+        <h1 class="title">Auth Page</h1>
+      </div>
 
-    <!-- Methods -->
-    <div class="methods-container hidden">
-      <h2>Available methods</h2>
-      <button class="method-btn" data-method="email">Email</button>
-      <button class="method-btn" data-method="phone" hidden>Phone</button>
-      <button class="method-btn" data-method="google">Google</button>
-      <button class="method-btn" data-method="guest" hidden>Guest</button>
-    </div>
+      <!-- Displays while everything else loads. -->
+      <p id="load" class="">Loading&hellip;</p>
 
-    <!-- Forms -->
-    <div id="form-container" class="form-container hidden">
-      <h2 id="form-header">Form Header</h2>
+      <!-- Methods -->
+      <div class="methods-container hidden">
+        <h2>Available methods</h2>
+        <button class="method-btn" data-method="email" type="button">Email</button>
+        <button class="method-btn" data-method="phone" type="button" hidden>Phone</button>
+        <button class="method-btn" data-method="google" type="button">Google</button>
+        <button class="method-btn" data-method="guest" type="button" hidden>Guest</button>
+      </div>
 
-      <form id="email-form" class="auth-form hidden">
-        <div id="email-password">
+      <!-- Forms -->
+      <div id="form-container" class="form-container hidden">
+        <h2 id="form-header">Form Header</h2>
+
+        <form id="email-form" class="auth-form hidden">
+          <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required>
+          </div>
+          <div>
+            <label for="password">Lozinka</label>
+            <input type="password" id="password" name="password" autocomplete="current-password" required>
+          </div>
+          <button type="submit">Continue</button>
+        </form>
+
+        <form id="names-form" class="auth-form hidden">
             <div>
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" autocomplete="email" required>
+              <label for="username">Username</label>
+              <input type="text" id="username" required>
             </div>
             <div>
-              <label for="password">Lozinka</label>
-              <input type="password" id="password" name="password" autocomplete="new-passsowrd" required>
+              <label for="name">Name</label>
+              <input type="text" id="name" required>
             </div>
-        </div>
-        <button type="submit">Continue</button>
-      </form>
+            <div>
+              <label for="surname">Surname</label>
+              <input type="text" id="surname" required>
+          </div>
+          <button type="submit">Continue</button>
+        </form>
 
-      <form id="names-form" class="auth-form hidden">
-        <div id="names">
-          <div>
-            <label for="username">Username</label>
-            <input type="text" id="username" required>
-          </div>
-          <div>
-            <label for="name">Name</label>
-            <input type="text" id="name" required>
-          </div>
-          <div>
-            <label for="surname">Surname</label>
-            <input type="text" id="surname" required>
-          </div>
-        </div>
-        <button type="submit">Continue</button>
-      </form>
-
-      <button type="button" class="signin-btn hidden">Sign IN</button>
-      <button type="button" class="signup-btn hidden">Sign UP</button>
-      <button type="button" class="back-btn hidden">BACK</button>
+        <button type="button" class="signin-btn hidden">Sign IN</button>
+        <button type="button" class="signup-btn hidden">Sign UP</button>
+        <button type="button" class="back-btn hidden">BACK</button>
+      </div>
     </div>
   </body>
 </html>
