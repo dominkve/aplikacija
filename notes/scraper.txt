@@ -1,0 +1,47 @@
+Now I have a JSON array. Each entry looks like this:
+```json
+  {
+    "__type": "SastavniceDTO:#KingICT.MZO.NISpVU.Public.DTO",
+    "PickStatus": 2,
+    "id": 1434,
+    "idPrograma": 40337,
+    "izvodjac": "Fakultet prometnih znanosti Sveučilišta u Zagrebu",
+    "mjesto": "Zagreb",
+    "naziv": "Aeronautika; smjer: Pilot - usmjerenje civilni pilot",
+    "nositelj": "Sveučilište u Zagrebu",
+    "programi": "<strong>Sveučilište u Zagrebu - Fakultet prometnih znanosti Sveučilišta u Zagrebu:</strong><br/>Aeronautika; smjer: Pilot - usmjerenje civilni pilot (180 bodova, 3 godine, redovni prijediplomski sveučilišni studij)"
+  },
+```
+
+`__type` is the same for all entries, so I believe that is something internal to the server or more precisely the storage.
+
+`PickStatus` is something internal to postani-student, at least I believe so. Something to do with the selection of programs one wants to apply to. 
+
+
+`id` is something I am not sure what it is used for, the programi widgets use `idPrograma`, so perhaps id is another server internal thing, but I could be wrong, I will find out if I hit a wall somewhere.
+
+`idPrograma` is the unique id of the programe, so far the only direct use case for it, that I know of, is using it in  the URL for a get request for getting the preconstructed widgets, which I do plan on using, since they contain information about each programs application process and requirements.
+
+`izvodjac` is the name of the faculty that offers the programe, I could probably use this when filtering the options displayed in the web sites UI.
+
+`mjesto` is where the programe is being held. I could use this in filtering as well.
+
+`naziv` is the name of the programe, useful in option generation and filtering.
+
+`nositelj` is the name of the university which offers the programe.
+
+`programi` is an html code snippet containing some basic info about the programe.
+
+
+Considering how the json entries are focused on the programs and the UI is focused on sastavnice. I suggest during the initial scraping of the page, and getting the raw html code, while extracting the options, using them to generate an HTML file, and comparing it to the old one, and only if there is a difference replacing it.
+
+So the flow of the script would look like this:
+1. Preparation (this is not a part of the script, but before it runs, the GitHub workflow will install all of the dependencies)
+2. GET HTML code (I send a get request to get the raw code of the page, where I can find all of the options and their values)
+3. Processing the HTML (I extract all of the select elements, I extract their options and compare them to the options found in my own code [I will probably just keep the json containing them around, and once I compare if necessary I will change my HTML], then I take the sastavnice options and I extract all of the values, which I then put into the lista array of an otherwise prepared payload)
+4. Initial POST request (I use that payload to make a POST request, I will get back a response containing 10 programs, the number of total pages, that is the batches of 10 programs, and the current page)
+5. Looping POST requests (I make a number of requests equal to the number of total pages, from each page I take the ten programs, and I push them onto an array. Crucially I rate limit the requests, because otherwise the server won't be able to keep up.)
+6. Final comparison (I compare the programs I just got, to the ones I had, if there is a difference I update, otherwise I continue)
+
+
+I have to look into cheerio or jsdom.
