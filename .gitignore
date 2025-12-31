@@ -15,5 +15,13 @@ aplikacija.wiki/
 
 # Experiments
 experiments/scrape/*
+experiments/pdf/*
 
+# Scrape
 !experiments/scrape/programi.js
+!experiments/scrape/package.json
+
+# PDF
+!experiments/pdf/bodovi.js
+!experiments/pdf/Bodovni-pragovi-2024.pdf
+!expriments/pdf/package.json
