@@ -1,16 +1,32 @@
-import { PDFParse } from "pdf-parse";
+import PDFParser from "pdf2json";
 import axios from "axios";
 import fs from "fs";
 
-async function extractText(buffer) {
-    const uint8Array = new Uint8Array(buffer);
-    const parser = new PDFParse({data: uint8Array});
-    const text = parser.getText();
+async function extractText(filePath) {
+    return new Promise((resolve, reject) => {
+        const pdfParser = new PDFParser(this, 1);
 
-    return text;
+        pdfParser.on("pdfParser_dataError", (errData) => {
+            console.error("PDF Parse Error:", errData.parserError);
+            reject(errData.parserError);
+        });
+
+        pdfParser.on("pdfParser_dataReady", (pdfData) => {
+            console.log("Data ready. Extracting text...");
+
+            let text = "";
+
+            text = pdfParser.getRawTextContent();
+            
+            resolve(text);
+        });
+
+        console.log(`Loadinf PDF: ${filePath}`);
+        pdfParser.loadPDF(filePath);
+    });
 }
 
-async function getPDF() {
+async function getPDF(path) {
     const PDFUrl = "https://www.srednja.hr/app/uploads/2025/01/Bodovni-pragovi-za-upis-na-fakultete-u-2024-35-51.pdf";
     try {
         console.log("Downloading PDF...");
@@ -24,7 +40,7 @@ async function getPDF() {
             }
         });
 
-        const writer = fs.createWriteStream('./public/Bodovni-pragovi-2024.pdf');
+        const writer = fs.createWriteStream(path);
         response.data.pipe(writer);
         
         // Handle completion
@@ -45,39 +61,14 @@ async function getPDF() {
     }
 }
 
-async function readPDF() {
-    const path = "./public/Bodovni-pragovi-2024.pdf";
-    return new Promise((resolve, reject) => {
-        const chunks = [];
-        const stream = fs.createReadStream(path);
-
-        stream.on("data", (chunk) => {
-            chunks.push(chunk);
-        });
-
-        stream.on("end", () => {
-            const buffer = Buffer.concat(chunks);
-            resolve(buffer);
-        });
-
-        stream.on("error", (error) => {
-            reject(error);
-        });
-    });
-}
 
 async function clean_string(string) {
     let lines = string.split("\n");
-    lines.shift();
-    
-    lines.forEach((line) => {
-        if (line.search("--") !== -1) {
-            let i = lines.indexOf(line);
-            lines.splice(i, 1);
-        };
-    });
+    lines.shift(); // remove first line (header)
 
-    lines = lines.filter(line => line !== "");
+    lines = lines.filter(line => {
+        return line.trim() !== "" && !line.includes("--");
+    });
 
     return lines;
 }
@@ -87,42 +78,47 @@ async function make_json(string) {
     
     let bodovi = {};
     lines.forEach((line) => {
-        let start = line.search(/\d/);
+        const start = line.search(/\d/);
 
-        let key = line.substring(0, start);
-        let value = line.substring(start);
+        if (start !== -1) {
+            const key = line.substring(0, start);
+            let value = line.substring(start);
 
-        bodovi[key] = value;
+            bodovi[key.trim()] = value.trim();
+        } else {
+            bodovi[line.trim()] = "Nema Podataka";
+        }
     });
 
     return JSON.stringify(bodovi, null, 2);
 }
 
 async function main() {
-    const path = './public/Bodovni-pragovi-2024.pdf';
-    if (fs.existsSync(path)) {
+    const PDFPath = './public/Bodovni-pragovi-2024.pdf';
+    const JSONPath = "./public/bodovi.json";
+
+    if (fs.existsSync(PDFPath)) {
         console.log('File exists');
     } else {
         console.log('File does not exist');
-        await getPDF();
+        await getPDF(PDFPath);
     }
 
-    const PDFBuffer = await readPDF()
-        .then((buffer) => {
-            console.log("Read pdf of", buffer.length, "length.");
-            return buffer;
-        })
-        .catch((error) => {
-            console.log("Error reading pdf: ", error);
-        })
+    try {
+        console.log("Extracting text from PDF...");
+        const PDFText = await extractText(PDFPath);
 
-    const PDFText = await extractText(PDFBuffer);
-    let PDFString = PDFText.text;
+        console.log("Extracted text sample:");
+        console.log(PDFText.substring(0, 500) + "..."); // Show first 500 chars
 
-    const json = await make_json(PDFString);
-    fs.writeFile("./public/bodovi.json", json, "utf8", () => {
-        console.log("Wrote to ./public/bodovi.json");
-    });
+        const json = await make_json(PDFText);
+
+        fs.writeFile(JSONPath, json, "utf8", () => {
+            console.log("Wrote to", JSONPath);
+        });
+    } catch (error) {
+        console.error("Error exracting text:", error);
+    }
 }
 
 

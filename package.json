@@ -1,13 +1,16 @@
 {
-    "name": "boodovi",
+    "name": "bodovi",
     "version": "1.0.0",
     "type": "module",
+    "exports": {
+        ".": "./bodovi.js"
+    },
     "scripts": {
-        "bodovi": "node scripts/bodovi.js"
+        "bodovi": "node ./bodovi.js"
     },
     "dependencies": {
         "axios": "^1.13.2",
         "fs": "^0.0.1-security",
-        "pdf-parse": "^2.4.5"
+        "pdf2json": "^4.0.0"
     }
 }
