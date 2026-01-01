@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1200, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Programi</title>
     <link rel="icon" href="../public/favicon.ico">
 
     <link rel="stylesheet" href="./css/global.css">
@@ -17,13 +19,7 @@
         <ul>
             <li>
                 <select id="VrstaUcilista">
-                    <option value="-1">Sve vrste visokih ucilista</option>
-                    <option value="1">Javna sveucilista</option>
-                    <option value="2">Javna veleucilista</option>
-                    <option value="3">Javne visoke skole</option>
-                    <option value="4">Privatna sveucilista</option>
-                    <option value="5">Privatne veleucilista</option>
-                    <option value="6">Privatne visoke skole</option>
+
                 </select>
             </li>
             
@@ -47,233 +43,42 @@
 
             <li>
                 <select id="Mjesto">
-                    <option value="-1">Sva mjesta</option>
-                    <option value="Biograd na Moru">Biograd na Moru</option>
-                    <option value="Bjelovar">Bjelovar</option>
-                    <option value="Čakovec">Čakovec</option>
-                    <option value="Dubrovnik">Dubrovnik</option>
-                    <option value="Đakovo">Đakovo</option>
-                    <option value="Đurđevac">Đurđevac</option>
-                    <option value="Gospić">Gospić</option>
-                    <option value="Ivanić-Grad">Ivanić-Grad</option>
-                    <option value="Karlovac">Karlovac</option>
-                    <option value="Knin">Knin</option>
-                    <option value="Koprivnica">Koprivnica</option>
-                    <option value="Krapina">Krapina</option>
-                    <option value="Križevci">Križevci</option>
-                    <option value="Kutina">Kutina</option>
-                    <option value="Makarska">Makarska</option>
-                    <option value="Nova Gradiška">Nova Gradiška</option>
-                    <option value="Opatija">Opatija</option>
-                    <option value="Orahovica">Orahovica</option>
-                    <option value="Osijek">Osijek</option>
-                    <option value="Pazin">Pazin</option>
-                    <option value="Petrinja">Petrinja</option>
-                    <option value="Poreč">Poreč</option>
-                    <option value="Požega">Požega</option>
-                    <option value="Pregrada">Pregrada</option>
-                    <option value="Pula">Pula</option>
-                    <option value="Rijeka">Rijeka</option>
-                    <option value="Sisak">Sisak</option>
-                    <option value="Slatina">Slatina</option>
-                    <option value="Slavonski Brod">Slavonski Brod</option>
-                    <option value="Split">Split</option>
-                    <option value="Šibenik">Šibenik</option>
-                    <option value="Varaždin">Varaždin</option>
-                    <option value="Velika Gorica">Velika Gorica</option>
-                    <option value="Vinkovci">Vinkovci</option>
-                    <option value="Virovitica">Virovitica</option>
-                    <option value="Vukovar">Vukovar</option>
-                    <option value="Zabok">Zabok</option>
-                    <option value="Zadar">Zadar</option>
-                    <option value="Zagreb">Zagreb</option>
-                    <option value="Zaprešić">Zaprešić</option>
+                    
                 </select>
             </li>
 
             <li class="hidden">
                 <select id="podrucje">
-                    <option selected="selected" value="-1">Sva područja</option>
-                    <option value="9">Arhitektura</option>
-                    <option value="4">Biomedicina i zdravstvo</option>
-                    <option value="6">Biotehničke znanosti</option>
-                    <option value="10">Dizajn</option>
-                    <option value="1">Društvene znanosti</option>
-                    <option value="11">Filmska umjetnost (filmske, elektroničke i medijske umjetnosti pokretnih slika)</option>
-                    <option value="12">Glazbena umjetnost</option>
-                    <option value="3">Humanističke znanosti</option>
-                    <option value="13">Interdisciplinarno umjetničko područje</option>
-                    <option value="8">Interdisciplinarno znanstveno područje</option>
-                    <option value="14">Kazališna umjetnost (scenske i medijske umjetnosti)</option>
-                    <option value="15">Književnost</option>
-                    <option value="16">Likovne umjetnosti</option>
-                    <option value="17">Plesna umjetnost i umjetnost pokreta</option>
-                    <option value="18">Primijenjena umjetnost</option>
-                    <option value="5">Prirodne znanosti</option>
-                    <option value="2">Tehničke znanosti</option>
-                    <option value="19">Umjetničko interdisciplinarno područje znanosti i umjetnosti</option>
+                    
                 </select>
             </li>
 
             <li class="hidden">
                 <select id="polja">
-                    <option value="-1">Sva polja</option>
-                    <option value="104">Animirani film</option>
-                    <option value="92">Animirani film (režija)</option>
-                    <option value="42">Arheologija</option>
-                    <option value="130">Arhitektonsko projektiranje (umjetnički dio)</option>
-                    <option value="38">Arhitektura i urbanizam</option>
-                    <option value="76">Bez polja</option>
-                    <option value="140">Bez polja</option>
-                    <option value="141">Bez polja</option>
-                    <option value="14">Biologija</option>
-                    <option value="80">Biologija, Kemija</option>
-                    <option value="55">Biotehnologija</option>
-                    <option value="36">Brodogradnja</option>
-                    <option value="70">Demografija</option>
-                    <option value="63">Dentalna medicina</option>
-                    <option value="72">Dizajn</option>
-                    <option value="136">Dizajn interakcija</option>
-                    <option value="137">Dizajn videoigara</option>
-                    <option value="133">Dizajn vizualnih komunikacija i primijenjena grafika</option>
-                    <option value="89">Dramaturgija izvedbe</option>
-                    <option value="88">Dramsko pismo</option>
-                    <option value="58">Drvna tehnologija</option>
-                    <option value="46">Edukacijsko-rehabilitacijske znanosti</option>
-                    <option value="1">Ekonomija</option>
-                    <option value="2">Elektrotehnika</option>
-                    <option value="43">Etnologija i antropologija</option>
-                    <option value="35">Farmacija</option>
-                    <option value="96">Filmska dramaturgija i scenarij</option>
-                    <option value="94">Filmska fotografija</option>
-                    <option value="118">Filmska i medijska produkcija</option>
-                    <option value="91">Filmska režija</option>
-                    <option value="41">Filmska umjetnost (filmske, elektroničke i medijske umjetnosti pokretnih slika)</option>
-                    <option value="4">Filologija</option>
-                    <option value="5">Filozofija</option>
-                    <option value="15">Fizika</option>
-                    <option value="81">Fizika, Kemija</option>
-                    <option value="111">Fotografija</option>
-                    <option value="50">Geodezija</option>
-                    <option value="67">Geofizika</option>
-                    <option value="56">Geografija</option>
-                    <option value="64">Geologija</option>
-                    <option value="119">Glazbena produkcija</option>
-                    <option value="22">Glazbena umjetnost</option>
-                    <option value="83">Gluma</option>
-                    <option value="90">Gluma</option>
-                    <option value="10">Građevinarstvo</option>
-                    <option value="51">Grafička tehnologija</option>
-                    <option value="101">Grafika</option>
-                    <option value="105">Ilustracija i strip</option>
-                    <option value="134">Industrijski dizajn i dizajn proizvoda</option>
-                    <option value="6">Informacijske i komunikacijske znanosti</option>
-                    <option value="73">Informacijske znanosti</option>
-                    <option value="69">Interdisciplinarne biotehničke znanosti</option>
-                    <option value="25">Interdisciplinarne društvene znanosti</option>
-                    <option value="31">Interdisciplinarne humanističke znanosti</option>
-                    <option value="26">Interdisciplinarne prirodne znanosti</option>
-                    <option value="32">Interdisciplinarne tehničke znanosti</option>
-                    <option value="66">Interdisciplinarno umjetničko polje</option>
-                    <option value="78">Izvođenje glazbe</option>
-                    <option value="100">Izvođenje glazbe - dirigiranje</option>
-                    <option value="99">Izvođenje glazbe - pjevanje</option>
-                    <option value="98">Izvođenje glazbe - sviranje (instrumenti)</option>
-                    <option value="27">Javno zdravstvo i zdravstvena zaštita</option>
-                    <option value="84">Kazališna režija</option>
-                    <option value="23">Kazališna umjetnost (scenske i medijske umjetnosti)</option>
-                    <option value="16">Kemija</option>
-                    <option value="39">Kemijsko inženjerstvo</option>
-                    <option value="40">Kineziologija</option>
-                    <option value="102">Kiparstvo</option>
-                    <option value="125">Klasični balet</option>
-                    <option value="13">Kliničke medicinske znanosti</option>
-                    <option value="139">Književno prevođenje</option>
-                    <option value="138">Književno stvaralaštvo (spisateljstvo)</option>
-                    <option value="79">Kognitivne znanosti</option>
-                    <option value="97">Kompozicija</option>
-                    <option value="74">Komunikacijske znanosti</option>
-                    <option value="123">Konzervacija i restauracija</option>
-                    <option value="110">Konzervacija i restauracija (umjetnički dio)</option>
-                    <option value="127">Koreografija</option>
-                    <option value="112">Kostimografija</option>
-                    <option value="124">Kreativne umjetničke terapije</option>
-                    <option value="52">Kroatologija</option>
-                    <option value="109">Likovna pedagogija</option>
-                    <option value="108">Likovna tehnologija (i reprodukcija)</option>
-                    <option value="28">Likovne umjetnosti</option>
-                    <option value="45">Logopedija</option>
-                    <option value="87">Lutkarstvo (lutkarska animacija i režija)</option>
-                    <option value="17">Matematika</option>
-                    <option value="82">Matematika, Fizika</option>
-                    <option value="53">Metalurgija</option>
-                    <option value="135">Modni dizajn i dizajn tekstila</option>
-                    <option value="95">Montaža</option>
-                    <option value="68">Nutricionizam</option>
-                    <option value="117">Oblikovanje i tehnologija lutke</option>
-                    <option value="116">Oblikovanje svjetla</option>
-                    <option value="114">Oblikovanje videa</option>
-                    <option value="115">Oblikovanje zvuka</option>
-                    <option value="77">Obrazovne znanosti</option>
-                    <option value="128">Pantomima</option>
-                    <option value="7">Pedagogija</option>
-                    <option value="132">Pejzažna arhitektura (umjetnički dio)</option>
-                    <option value="65">Plesna umjetnost i umjetnost pokreta</option>
-                    <option value="48">Politologija</option>
-                    <option value="18">Poljoprivreda</option>
-                    <option value="8">Povijest</option>
-                    <option value="33">Povijest umjetnosti</option>
-                    <option value="19">Pravo</option>
-                    <option value="20">Prehrambena tehnologija</option>
-                    <option value="30">Primijenjena umjetnost</option>
-                    <option value="122">Primijenjene likovne umjetnosti</option>
-                    <option value="120">Produkcija scenskih i izvedbenih umjetnosti</option>
-                    <option value="121">Produkcija videoigara</option>
-                    <option value="9">Psihologija</option>
-                    <option value="3">Računarstvo</option>
-                    <option value="86">Radiofonska režija</option>
-                    <option value="71">Religijske znanosti </option>
-                    <option value="85">Režija glazbenih i scenskih formi</option>
-                    <option value="57">Rudarstvo, nafta i geološko inženjerstvo</option>
-                    <option value="113">Scenografija</option>
-                    <option value="129">Scensko kretanje</option>
-                    <option value="62">Sigurnosne i obrambene znanosti</option>
-                    <option value="103">Slikarstvo</option>
-                    <option value="93">Snimanje (filmsko i elektroničko)</option>
-                    <option value="54">Socijalne djelatnosti</option>
-                    <option value="37">Sociologija</option>
-                    <option value="21">Strojarstvo</option>
-                    <option value="126">Suvremeni ples</option>
-                    <option value="59">Šumarstvo</option>
-                    <option value="29">Tehnologija prometa i transport</option>
-                    <option value="60">Tekstilna tehnologija</option>
-                    <option value="12">Temeljne medicinske znanosti</option>
-                    <option value="47">Temeljne tehničke znanosti</option>
-                    <option value="11">Teologija</option>
-                    <option value="106">Umjetnost novih medija i umjetničkih praksi</option>
-                    <option value="131">Urbanističko projektiranje (umjetnički dio)</option>
-                    <option value="61">Veterinarska medicina</option>
-                    <option value="107">Vizualna umjetnost videoigara i virtualna stvarnost</option>
-                    <option value="24">Znanost o umjetnosti</option>
-                    <option value="49">Zrakoplovstvo, raketna i svemirska tehnika</option>
+                    
                 </select>
             </li>
         </ul>
-        <button id="search-btn">Search</button>
+        <button id="search-btn" type="button">Search</button>
     </div>
 
     <br>
 
-    <button class="previous-btn hidden">Previous</button>
-    <button class="next-btn hidden">Next</button>
+    <button class="previous-btn hidden" type="button">Previous</button>
+    <button class="next-btn hidden" type="button">Next</button>
 
     <div id="programi-container" class="hidden">
         <table id="programi-table">
-            <tr>
-                <th>Naziv studija</th>
-                <th>Mjesto izvođenja</th>
-                <th>Osnovne informacije</th>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Naziv studija</th>
+                    <th>Mjesto izvođenja</th>
+                    <th>Osnovne informacije</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
         </table>
     </div>
 

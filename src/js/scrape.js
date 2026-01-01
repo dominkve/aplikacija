@@ -1,5 +1,9 @@
 import logger from '../utils/logger.js';
 
+
+const result = await initOptions();
+
+
 /**
  * Add default options to the select elements.
  * @param {HTMLSelectElement} selectUcilista        - The select element for ucilista 
@@ -235,11 +239,12 @@ function make_payload_lista(ucilista) {
 
 function clean_programi() {
     let table = document.getElementById("programi-table");
-    let rows = table.querySelectorAll("tr");
+    let tbody = table.querySelector("tbody");
+    let rows = tbody.querySelectorAll("tr");
 
-    for (let i=1; i < rows.length; i++) {
-        rows[i].remove();
-    }
+    rows.forEach((row) => {
+        row.remove();
+    })
 }
 
 const widget_url = 'https://www.postani-student.hr/usercontrols/uvjeticontainer.aspx?id=';
@@ -265,11 +270,12 @@ function display_widget(id) {
  * @param {*} data - the (`response.data.d) object from the response to the axios post request.
  */
 function populate_programi(data) {
-    let programi_table = document.getElementById("programi-table");
+    let table = document.getElementById("programi-table");
+    let tbody = table.querySelector("tbody");
     let programi = data.Programi;
 
     for (let program in programi) {
-        let new_row = programi_table.insertRow(-1);
+        let new_row = tbody.insertRow(-1);
 
         let cell = new_row.insertCell(0);
         cell.innerHTML = programi[program].naziv;
@@ -366,6 +372,54 @@ async function scrapePrograms() {;
         })
     } catch (error) {
         console.log(error);
+    }
+}
+
+async function getOptions(url) {
+    console.log("Fetching options...");
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('Options fetched.');
+        return data;
+    } catch (error) {
+        console.error('Fetching failed:', error);
+        throw error;
+    }
+}
+
+async function initOptions() {
+    const URL = "../../public/options.json";
+    
+    try {
+        const options = await getOptions(URL);
+        logger.line();
+        console.log("Options", options);
+        logger.line();
+
+        const selectElements = document.querySelectorAll("select");
+
+        let index = 0;
+        for (let select in options) {
+            let selectElement = selectElements[index++];
+            for (let option in options[select]) {
+                let _option = new Option(option, options[select][option]);
+
+                selectElement.add(_option);
+                if (_option.value == "-1") {
+                    _option.setAttribute("selected", "selected");
+                }
+            }
+        }
+
+        return true;
+    } catch (error) {
+        console.error("Failed to initialize options:", error);
+        return false;
     }
 }
 
