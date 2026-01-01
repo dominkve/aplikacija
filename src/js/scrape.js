@@ -1,8 +1,58 @@
 import logger from '../utils/logger.js';
 
+main();
 
-const result = await initOptions();
+async function main() {
+    const result = await initOptions();
 
+    let data = await getUcilista();
+
+    console.log(data);
+    let ucilista = data;
+
+    initButtons(ucilista);
+
+    document.getElementById("VrstaUcilista").addEventListener("change", () => {
+        vrstaFilter(ucilista);
+    });
+}
+
+function vrstaFilter(ucilista) {
+    let vrsta = document.getElementById("VrstaUcilista").value;
+
+    logger.line("=");
+    console.log("Selected vrsta: ", vrsta);
+    logger.line("=");
+
+    let selectUcilista = document.getElementById("Ucilista");
+    let selectSastavnice = document.getElementById("Sastavnice");
+
+    clear_options(selectUcilista, selectSastavnice);
+    
+    add_options(selectUcilista, selectSastavnice, ucilista, vrsta);
+}
+
+function initButtons(ucilista) {
+    document.getElementById("search-btn").addEventListener("click", () => {
+        scrapePrograms(ucilista);
+    });
+
+    document.querySelectorAll(".next-btn").forEach(button => {
+        button.addEventListener("click", () => {
+            next_page(ucilista)
+        });
+    });
+
+    document.querySelectorAll(".previous-btn").forEach(button => {
+        button.addEventListener("click", () => {
+            previous_page(ucilista)
+        });
+    });
+
+    document.getElementById("close-btn").addEventListener("click", () => {
+        document.getElementById("widget-container").classList.add("hidden");
+    });
+}
 
 /**
  * Add default options to the select elements.
@@ -94,40 +144,25 @@ function clear_options(selectUcilista, selectSastavnice) {
     selectSastavnice.innerHTML = "";
 }
 
-console.log("Fetching ucilista.json...");
-let ucilista = null;
-fetch("./data/ucilista.json")
-    .then(response => {
-        return response.json()
-    })
-    .then(data => {
-        console.log(data);
-        ucilista = data;
+async function getUcilista() {
+    console.log("Fetching ucilista.json...");
 
-        let selectUcilista = document.getElementById("Ucilista");
-        let selectSastavnice = document.getElementById("Sastavnice");
+    let ucilista = null;
+    try {
+        const response = await fetch("./data/ucilista.json");
 
-        add_options(selectUcilista, selectSastavnice, ucilista, -1);
+        if (!response.ok) {
+            throw new Error(`HTTP error: ${response.status}`);
+        }
 
-        document.getElementById("search-btn").addEventListener("click", scrapePrograms);
-        document.getElementById("VrstaUcilista").addEventListener("change", function () {
-            let vrsta = document.getElementById("VrstaUcilista").value;
+        const data = await response.json();
 
-            logger.line("=");
-            console.log("Selected vrsta: ", vrsta);
-            logger.line("=");
-
-            let selectUcilista = document.getElementById("Ucilista");
-            let selectSastavnice = document.getElementById("Sastavnice");
-
-            clear_options(selectUcilista, selectSastavnice);
-            
-            add_options(selectUcilista, selectSastavnice, ucilista, vrsta);
-        });
-    })
-    .catch (error => {
-        console.error("Error fetching: ", error);
-    });
+        return data;
+    } catch (error) {
+        console.error(error);
+        throw new Error(error);
+    }
+}
 
 const url = "https://www.postani-student.hr/webservices/Pretraga.svc/PretraziPrograme";
 const proxy = 'https://corsproxy.io/?url=';
@@ -292,14 +327,14 @@ function populate_programi(data) {
 /**
  * Updates the payload to select the next page, that is next batch of programs.
  */
-function next_page() {
+function next_page(ucilista) {
     payload.page++;
-    scrapePrograms();
+    scrapePrograms(ucilista);
 }
 
-function previous_page() {
+function previous_page(ucilista) {
     payload.page--;
-    scrapePrograms();
+    scrapePrograms(ucilista);
 }
 
 function show_next_button() {
@@ -348,7 +383,7 @@ function pager(data) {
 /**
  * Scrape programs data from postani-student.hr using axios.
  */
-async function scrapePrograms() {;
+async function scrapePrograms(ucilista) {;
     try {
         payload.lista = make_payload_lista(ucilista);
         console.log("ID list: ", payload.lista);
@@ -402,6 +437,7 @@ async function initOptions() {
         logger.line();
 
         const selectElements = document.querySelectorAll("select");
+        console.log(selectElements);
 
         let index = 0;
         for (let select in options) {
@@ -422,16 +458,3 @@ async function initOptions() {
         return false;
     }
 }
-
-document.querySelectorAll(".next-btn").forEach(button => {
-    button.addEventListener("click", next_page);
-});
-
-
-document.querySelectorAll(".previous-btn").forEach(button => {
-    button.addEventListener("click", previous_page);
-});
-
-document.getElementById("close-btn").addEventListener("click", () => {
-    document.getElementById("widget-container").classList.add("hidden");
-});
