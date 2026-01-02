@@ -34,6 +34,7 @@ function vrstaFilter(ucilista) {
 
 function initButtons(ucilista) {
     document.getElementById("search-btn").addEventListener("click", () => {
+        payload.page = 1;           // reset page so that every search starts from page 1
         scrapePrograms(ucilista);
     });
 
@@ -385,7 +386,7 @@ function pager(data) {
 
     if (data.CurrentPage == 1) {
         hide_previous_button();
-        show_next_button();
+        data.CurrentPage === data.TotalPages ? hide_next_button() : show_next_button();
     } else if (data.CurrentPage < data.TotalPages) {
         show_next_button();
         show_previous_button();
