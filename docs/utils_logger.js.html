@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: utils/logger.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,33 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: utils/logger.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * A simple logger utility for console output with formatting capabilities.
+ * @namespace logger
+ */
+const logger = {
+    /**
+     * Draws a horizontal line in the console using repeated characters.
+     * @param {string} [char='-']   - The character to repeat to form the line.
+     * @param {number} [length=50]  - The length of the line (number of characters).
+     */
+    line: (char = '-', length = 50) => {
+        console.log(char.repeat(length));
+    }
+}
 
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+export default logger;</code></pre>
+        </article>
+    </section>
 
 
 
