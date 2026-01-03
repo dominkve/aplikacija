@@ -204,18 +204,16 @@ function add_options(selectUcilista, selectSastavnice, selectMjesta, ucilista, v
                                     s_added = true;
                                 }
 
-                                s.mjesta.filter((m) => {
-                                    if (!mjesta.includes(m)) {
-                                        mjesta.push(m);
+                                if (!mjesta.includes(m)) {
+                                    mjesta.push(m);
 
-                                        console.log("Mjesto", m)
-                                        let option = new Option(m, m);
-                                        if (m == mjesto) {
-                                            option.setAttribute("selected", "selected");
-                                        }
-                                        selectMjesta.add(option);
+                                    console.log("Mjesto", m)
+                                    let option = new Option(m, m);
+                                    if (m == mjesto) {
+                                        option.setAttribute("selected", "selected");
                                     }
-                                })
+                                    selectMjesta.add(option);
+                                }
                             }
                         })
                     }
@@ -383,16 +381,18 @@ function display_widget(id) {
 
     const url = widget_url + id;
 
-    axios.get(url)
-    .then(response => {
-        console.log(response.data); // Logs the fetched data
-        document.querySelector("iframe").srcdoc = response.data;
-    
-        document.getElementById("widget-container").classList.remove("hidden");
-    })
-    .catch(error => {
-    console.error('Error fetching data:', error.message);
-    });
+    return axios.get(url)
+        .then(response => {
+            console.log(response.data); // Logs the fetched data
+            document.querySelector("iframe").srcdoc = response.data;
+        
+            document.getElementById("widget-container").classList.remove("hidden");
+            return true;
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error.message);
+            return false;
+        });
 }
 
 function scrollToWidget() {
@@ -418,12 +418,10 @@ function populate_programi(data) {
 
         let cell = new_row.insertCell(0);
         cell.innerHTML = programi[program].naziv;
-        cell.addEventListener("click", () => {
-            display_widget(programi[program].idPrograma);
+        cell.addEventListener("click", async () => {
+            await display_widget(programi[program].idPrograma);
 
-            setTimeout(() => {
-                scrollToWidget();
-            }, 100);
+            scrollToWidget();
         });
 
         cell = new_row.insertCell(1);

@@ -7,11 +7,20 @@ input {
     flex-direction: column;
     align-items: center;
     gap: 10px; /* Adds consistent spacing between buttons */
+    max-width: fit-content;
+    margin: auto auto;
 }
 
 .methods-container h2 {
-    margin-bottom: 20px;
+    justify-self: left;
 }
+
+.methods-container > div {
+    max-width: 500px; 
+    margin: 100px auto 16px;
+    width: 100%;
+}
+
 
 .form-container {
     max-width: 400px;
@@ -53,7 +62,7 @@ form#names-form.auth-form div label {
     border-radius: 4px;
     cursor: pointer;
     font-size: large;
-    width: 200px; 
+    width: 100%; 
     text-align: center;
     transition: background-color 0.3s;
 }
