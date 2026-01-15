@@ -14,17 +14,37 @@
     <script type="module" src="./js/user.js"></script>
     <script type="module" src="./js/main.js"></script>
   </head>
-  <body>
-    <div class="container">
-      <div class="title">
-        <h1 class="title">Main Site</h1>
+    <body>
+      <div class="container">
+        <div class="title">
+          <h1 class="title">Main Site</h1>
+        </div>
+    
+        <div class="header">
+    <div class="logo"><p>Logo</p></div>
+    <div class="menu"><button id="logout-btn">Odjava</button></div>
+    </div>
+    <div class="main">
+    <div class="infoPanel">
+      <div class="pfp"><p>NN</p></div>
+        <h2 id="fullName">Ime i prezime</h2>
+        <h3 id="ageNum">Broj godina</h3>
+        <button>Ispuni obrazac</button>
       </div>
-
-      <div class="user-info card">
-        <h2>User Info</h2>
-        <p></p>
-        <button id="logout-btn" type="button">Logout</button>
+    <div class="dirInfo">
+      <div class="dirIdea">
+        <p>Fakultet koji ti naviše odgovara je:</p> </br><p class="pick" id="pick">-</p>
       </div>
+        <div class="dirOpt">
+          <ul class="noBullets" id="user-info">
+            <li><button>Profil</button></li>
+            <li><button>Ocjene</button></li>
+            <li><button>Odabrane mature</button></li>
+            <li><button>Nešto još</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
       <div class="programi-container card">
         <h2>Studijski Programi</h2>
