@@ -46,6 +46,7 @@
                         <tr>
                             <td>Naziv programa</td>
                             <td>Potrebni bodovi</td>
+                            <td>Ukupna upisna kvota</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,14 +59,23 @@
         <script type="module">
             async function getData() {
                 const url = "../public/bodovi.json";
+                const url2 = "../public/broj_prijava.json";
                 try {
                     const response = await fetch(url);
+                    const response2 = await fetch(url2); // isto kao i za bodove, ali za broj_prijava.json za kvotu upisa
+
                     if (!response.ok) {
                         throw new Error(`Response status: ${response.status}`);
+                    }
+                    if (!response2.ok) {
+                        throw new Error(`Response status: ${response2.status}`);
                     }
 
                     const result = await response.json();
                     return result;
+                    const result2 = await response2.json(); // isto kao i za bodove, ali za broj_prijava.json za kvotu upisa
+                    return result2;
+                    
                 } catch (error) {
                     console.error(error.message);
                 }
@@ -108,11 +118,11 @@
                     cell = new_row.insertCell(1);
                     cell.innerHTML = data[program];
                     cell.classList.add("bodovi-cell");
+                    
                     /*
-
                     cell = new_row.insertCell(2);
                     cell.innerHTML = data[program];
-                    cell.classList.add("bodovi-cell"); */
+                    cell.classList.add("kvota-cell"); */
                 });
             };
 
