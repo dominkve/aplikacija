@@ -38,6 +38,7 @@
                     <label for="search">Upiši naziv ili dio naziva programa.</label>
                     <input type="text" id="search" name="search"/>
                 </div>
+                <button id="statSwitch">Bodovi/Upisna kvota</button>
             </div>
 
             <div id="table-container" class="hidden card">
@@ -46,6 +47,17 @@
                         <tr>
                             <td>Naziv programa</td>
                             <td>Potrebni bodovi</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+
+                <table id="kvota-table" class="hidden">
+                    <thead>
+                        <tr>
+                            <td>Naziv programa</td>
                             <td>Ukupna upisna kvota</td>
                         </tr>
                     </thead>
@@ -54,28 +66,18 @@
                     </tbody>
                 </table>
             </div>
-        </div>
 
         <script type="module">
             async function getData() {
                 const url = "../public/bodovi.json";
-                const url2 = "../public/broj_prijava.json";
                 try {
                     const response = await fetch(url);
-                    const response2 = await fetch(url2); // isto kao i za bodove, ali za broj_prijava.json za kvotu upisa
-
                     if (!response.ok) {
                         throw new Error(`Response status: ${response.status}`);
-                    }
-                    if (!response2.ok) {
-                        throw new Error(`Response status: ${response2.status}`);
                     }
 
                     const result = await response.json();
                     return result;
-                    const result2 = await response2.json(); // isto kao i za bodove, ali za broj_prijava.json za kvotu upisa
-                    return result2;
-                    
                 } catch (error) {
                     console.error(error.message);
                 }
@@ -118,11 +120,6 @@
                     cell = new_row.insertCell(1);
                     cell.innerHTML = data[program];
                     cell.classList.add("bodovi-cell");
-                    
-                    /*
-                    cell = new_row.insertCell(2);
-                    cell.innerHTML = data[program];
-                    cell.classList.add("kvota-cell"); */
                 });
             };
 
@@ -148,6 +145,16 @@
                 console.log("Table initialized.")
             }
 
+            function switchTable() {
+                console.log("switching tables")
+                const kvota = document.getElementById("kvota-table");
+                const bodovi = document.getElementById("bodovi-table");
+
+                kvota.classList.toggle("hidden");
+                bodovi.classList.toggle("hidden");
+            }; 
+            
+
             async function main() {
                 const data = await getData();
 
@@ -167,6 +174,8 @@
 
                     populateTable(data, programs);
                 });
+
+                document.getElementById("statSwitch").addEventListener("click", switchTable);
             }
             
             main();
