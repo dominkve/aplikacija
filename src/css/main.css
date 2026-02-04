@@ -24,7 +24,7 @@ h2 {
 }
 
 #fullName {
-    color: #3371b3;
+    color: #021e33;
 }
 
 .header {
@@ -116,4 +116,5 @@ li {
     flex-direction: column;
   }
 }
+
 
