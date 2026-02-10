@@ -24,6 +24,10 @@
             .naziv-cell {
                 padding: 5px;
             }
+#statSwitch {
+padding: 4px;
+margin: 4px;
+}
         </style>
     </head>
     <body>
@@ -38,6 +42,7 @@
                     <label for="search">Upiši naziv ili dio naziva programa.</label>
                     <input type="text" id="search" name="search"/>
                 </div>
+                <button id="statSwitch">Bodovi/Upisna kvota</button>
             </div>
 
             <div id="table-container" class="hidden card">
@@ -52,14 +57,24 @@
 
                     </tbody>
                 </table>
+
+                <table id="kvota-table" class="hidden">
+                    <thead>
+                        <tr>
+                            <td>Naziv programa</td>
+                            <td>Ukupna upisna kvota</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
             </div>
-        </div>
 
         <script type="module">
-            async function getData() {
-                const url = "../public/bodovi.json";
+            async function getJson(path) {
                 try {
-                    const response = await fetch(url);
+                    const response = await fetch(path);
                     if (!response.ok) {
                         throw new Error(`Response status: ${response.status}`);
                     }
@@ -71,7 +86,7 @@
                 }
             }
 
-            function searchData(data, searchQuery) {
+            function searchBodovi(data, searchQuery) {
                 let temp = data;
                 let tempQuery = searchQuery.toLowerCase();
                 let programs = [];
@@ -94,7 +109,30 @@
                 }
             };
 
-            function populateTable(data, programs) {
+            function searchPrijave(data, searchQuery) {
+                let temp = data;
+                let tempQuery = searchQuery.toLowerCase();
+                let programs = [];
+                let index = 0;
+                try {
+                    if (tempQuery === "") {
+                        for (let program in temp) {
+                            programs[index++] = data[program];
+                        }
+                    } else {
+                        for (let program in temp) {
+                            if ((data[program]["Studij"] + "; " + data[program]["Mjesto"]).toLowerCase().includes(tempQuery)) {
+                                programs[index++] = data[program];
+                            }
+                        }
+                    }
+                    return programs;
+                } catch (error) {
+                    console.log("Error searching data: ", error);
+                }
+            };
+
+            function populateBodovi(data, programs) {
                 const table = document.getElementById("bodovi-table");
                 let tableBody = table.querySelector("tbody");
 
@@ -111,32 +149,73 @@
                 });
             };
 
-            function cleanTable() {
-                let table = document.getElementById("bodovi-table");
-                let tbody = table.querySelector("tbody");
-                let rows = tbody.querySelectorAll("tr");
+            function populatePrijave(data, programs) {
+                const table = document.getElementById("kvota-table");
+                let tableBody = table.querySelector("tbody");
+
+                console.log(programs)
+                programs.forEach((program) => {
+                    let new_row = tableBody.insertRow(-1);
+
+                    let cell = new_row.insertCell(0);
+                    cell.classList.add("naziv-cell");
+                    cell.innerHTML = program["Studij"] + "; " + program["Mjesto"];
+
+                    cell = new_row.insertCell(1);
+                    cell.innerHTML = program["Ukupna upisna kvota"];
+                    cell.classList.add("bodovi-cell");
+                })
+            }
+
+            function cleanTables() {
+                let bodies = document.querySelectorAll("tbody");
+
+                let rows = [];
+
+                bodies.forEach((t) => {
+                    rows.push(t.querySelectorAll("tr"));
+                })
                 
-                rows.forEach((row) => {
-                    row.remove();
+                console.log(rows)
+                rows.forEach((list) => {
+                    list.forEach((row) => {
+                        row.remove();
+                    });
                 });
             }
 
-            function table_init(data) {
+            function table_init(bodovi, prijave) {
                 console.log("Initializing table...");
 
-                let programs = searchData(data, "");
+                const programs = searchBodovi(bodovi, "");
+                const _prijave = searchPrijave(prijave, "");
 
-                populateTable(data, programs);
+                populateBodovi(bodovi, programs);
+                populatePrijave(prijave, _prijave);
 
                 document.getElementById("table-container").classList.remove("hidden");
 
-                console.log("Table initialized.")
+                console.log("Tables initialized.")
             }
 
-            async function main() {
-                const data = await getData();
+            function switchTable() {
+                console.log("switching tables")
+                const kvota = document.getElementById("kvota-table");
+                const bodovi = document.getElementById("bodovi-table");
 
-                table_init(data);
+                kvota.classList.toggle("hidden");
+                bodovi.classList.toggle("hidden");
+            }; 
+            
+
+            async function main() {
+                const bodovi_path = "../public/bodovi.json";
+                const prijave_path = "../public/broj_prijava.json";
+
+                const bodovi = await getJson(bodovi_path);
+                const prijave = await getJson(prijave_path);
+
+                table_init(bodovi, prijave);
 
                 const input = document.getElementById("search");
 
@@ -146,12 +225,16 @@
 
                     console.log("Searching for:", searchQuery);
 
-                    let programs = searchData(data, searchQuery);
+                    const programs = searchBodovi(bodovi, searchQuery);
+                    const _prijave = searchPrijave(prijave, searchQuery);
 
-                    cleanTable();   
+                    cleanTables();   
 
-                    populateTable(data, programs);
+                    populateBodovi(bodovi, programs);
+                    populatePrijave(prijave, _prijave);
                 });
+
+                document.getElementById("statSwitch").addEventListener("click", switchTable);
             }
             
             main();
