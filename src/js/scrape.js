@@ -257,7 +257,7 @@ async function getUcilista() {
 }
 
 const url = "https://www.postani-student.hr/webservices/Pretraga.svc/PretraziPrograme";
-const proxy = 'https://corsproxy.io/?url=';
+const proxy = 'https://proxy.corsfix.com/?';
 
 /**
  * Payload for scrapping postani-student.hr
