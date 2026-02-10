@@ -31,11 +31,15 @@ class Test {
     // function for dynamically generating test questions
     generate = function() {
         console.log("Generating test...");
-
+        
         // loops over all the questions in the test object
         for (let question_index in this.questions) {
+            let obj = this.questions[question_index];
+            console.log(obj)
+            
+            const code = obj.code;
+            const sections = obj.sections;
 
-            const question_data = this.questions[question_index];
             const template = document.getElementById("question_template");
             const clone = template.content.cloneNode(true);
             const form = clone.querySelector(".question_form");
@@ -43,8 +47,8 @@ class Test {
             const question = clone.querySelector(".question_question");
 
             form.id = "question_" + question_index;
-            title.textContent = "Question " + question_index;
-            question.innerHTML = question_data.question;
+            title.textContent = code;
+            question.innerHTML = ;
 
             const labels = clone.querySelectorAll(".question_answer");
             for (let i = 0; i < labels.length; i++) {
@@ -143,10 +147,8 @@ async function fetch_data(test_index) {
     let test_data = await fetch(path)
         .then(response => response.json())
         .then(data => {
-        let test = data["test"];
-        console.log("Fetched: ")
-        console.log(test);
-        return test
+        console.log(data);
+        return data
     });
 
     return test_data;
@@ -172,7 +174,7 @@ async function start_test() {
         console.log(test_data);
 
         console.log("Creating the new Test object...")
-        const _test = new Test(test_data["time"], test_data["questions"]);
+        const _test = new Test(test_data["time"] ? test_data["time"] : 5*60, test_data["questions"] ? test_datap["questions"] : test_data);
     };
 };
 

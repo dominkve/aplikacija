@@ -1,27 +1,109 @@
 {
-    "test": {
-        "questions": {
-            "1": {
-                "question": "Question 1?",
-                "answers": {
-                    "0": "Answer A",
-                    "1": "Answer B",
-                    "2": "Answer C",
-                    "3": "Answer D"
-                },
-                "correct_answer": "a"
-            },
-            "2": {
-                "question": "Question 2?",
-                "answers": {
-                    "0": "Answer A",
-                    "1": "Answer B",
-                    "2": "Answer C",
-                    "3": "Answer D"
-                },
-                "correct_answer": "b"
-            }
-        },
-        "time": 6
-    }
+"qs": [
+  {
+    "Aktivnosti": {
+    "R": [
+      "Razumijem se u razne aparate.",
+      "Imam spretne ruke i prste.",
+      "Najbolje obavljam one zadatke za koje postoje jasna uputstva."
+    ],
+    "I": [
+      "Uspješno rješavam zagonetke (rebuse, anagrame i sl.).",
+      "Brzo uviđam nedostatke u objašnjenjima koja daju drugi ljudi.",
+      "Znatiželjan/na sam."
+    ],
+    "A": [
+      "Uspješan/na sam u nekoj formi umjetnosti (npr. slikanje, ples, pisanje, dizajniranje i sl.).",
+      "Kreativan/na sam.",
+      "Mogu prepoznati vrijedno umjetničko djelo."
+    ],
+    "S": [
+      "Uspješno podučavam druge.",
+      "Suosjećam se sa problemima drugih ljudi.",
+      "Razumijem međuljudske odnose."
+    ],
+    "E": [
+      "Ubjedljiv/a sam.",
+      "Vješt/a sam u vođenju drugih.",
+      "Dobar/a sam organizator/ica."
+    ],
+    "C": [
+      "Uspješno pronalazim pogreške u gomili brojeva.",
+      "Dobar/a sam u sređivanju pisama i papira u dokumentaciji.",
+      "Dobro mi idu kancelarijski poslovi."
+    ]
+  }},
+
+  {"Interesi": {
+    "R": [
+      "Volio/la bih rukovati mašinama, aparatima, uređajima ili alatima.",
+      "Volio/la bih uzgajati ili trenirati životinje.",
+      "Volio/la bih uzgajati voće, povrće ili cvijeće."
+    ],
+    "I": [
+      "Volio/la bih se baviti istraživanjem.",
+      "Volio/la bih izvoditi eksperimente.",
+      "Volio/la bih raditi na otkrivanju novih lijekova, tehnologija i sl."
+    ],
+    "A": [
+      "Volio/la bih se baviti muzikom, plesom ili glumom.",
+      "Volio/la bih se baviti filmskom ili kazališnom režijom.",
+      "Volio/la bih pisati pjesme ili priče."
+    ],
+    "S": [
+      "Volio/la bih podučavati ljude.",
+      "Volio/la bih pomagati ljudima u rješavanju njihovih problema.",
+      "Volio/la bih raditi sa djecom."
+    ],
+    "E": [
+      "Volio/la bih zastupati poduzeća ili institucije.",
+      "Volio/la bih organizirati reklamne kampanje.",
+      "Volio/la bih rukovoditi poduzećem ili institucijom."
+    ],
+    "C": [
+      "Volio/la bih raditi na šalteru.",
+      "Volio/la bih voditi poslovne knjige.",
+      "Volio/la bih provjeravati točnost rada drugih ljudi."
+    ]
+  }},
+
+  {"Zanimanja": {
+    "R": [
+      "Uzgajivač(ica) životinja",
+      "Automehaničar(ka)",
+      "Vozač(ica) kamiona",
+      "Krojač(ica)"
+    ],
+    "I": [
+      "Fizičar(ka) istraživač",
+      "Kemičar(ka)",
+      "Medicinski laborant",
+      "Filozof(kinja)"
+    ],
+    "A": [
+      "Slikar(ka)",
+      "Glumac(ica)",
+      "Muzičar(ka)",
+      "Režiser(ka)"
+    ],
+    "S": [
+      "Pedagog(inja)",
+      "Nastavnik (Nastavnica)",
+      "Socijalni radnik (Socijalna radnica)",
+      "Psiholog(inja)"
+    ],
+    "E": [
+      "Direktor(ica) poduzeća",
+      "Trgovac (Trgovkinja)",
+      "Organizator(ica) putovanja",
+      "Trgovac (Trgovkinja) nekretninama"
+    ],
+    "C": [
+      "Službenik(ica) na šalteru",
+      "Financijski službenik(Financijska službenica)",
+      "Knjigovođa (Knjigovotkinja)",
+      "Blagajnik(ica)"
+    ]
+  }}
+]
 }
