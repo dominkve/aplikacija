@@ -31,32 +31,42 @@ class Test {
     // function for dynamically generating test questions
     generate = function() {
         console.log("Generating test...");
-        
+        const template = document.getElementById("question_template");
+
         // loops over all the questions in the test object
-        for (let question_index in this.questions) {
-            let obj = this.questions[question_index];
+        for (let section in this.questions.qs) {
+            let obj = this.questions.qs[section];
             console.log(obj)
             
-            const code = obj.code;
-            const sections = obj.sections;
+            let question_index = 0;
+            const section_name = Object.keys(obj)[0];
+            for (let type in obj[section_name]) {
+                for (let i in obj[section_name][type]) {
+                    const clone = template.content.cloneNode(true);
+                    const form = clone.querySelector(".question_form");
+                    const title = clone.querySelector(".question_title");
+                    const q = clone.querySelector(".question_question");
 
-            const template = document.getElementById("question_template");
-            const clone = template.content.cloneNode(true);
-            const form = clone.querySelector(".question_form");
-            const title = clone.querySelector(".question_title");
-            const question = clone.querySelector(".question_question");
+                    const question = obj[section_name][type][i];
 
-            form.id = "question_" + question_index;
-            title.textContent = code;
-            question.innerHTML = ;
+                    form.id = "question_" + question_index++;
+                    title.textContent = section_name + " " + type;
+                    q.textContent = question;
 
-            const labels = clone.querySelectorAll(".question_answer");
-            for (let i = 0; i < labels.length; i++) {
-                clone.getElementById("qn" + i).setAttribute("name", "question_" + question_index);
-                labels[i].textContent = question_data.answers[i];
+                    /*
+                    const labels = clone.querySelectorAll(".question_answer");
+                    for (let i = 0; i < labels.length; i++) {
+                        clone.getElementById("qn" + i).setAttribute("name", "question_" + question_index);
+                        labels[i].textContent = question_data.answers[i];
+                    }
+                    */
+                   
+                    document.body.appendChild(clone);
+                }
             }
 
-            document.body.appendChild(clone);
+           
+
         };
     };
 
