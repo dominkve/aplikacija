@@ -89,10 +89,11 @@ a:hover {
 button {
     background-color: #00aeb5;
     color: whitesmoke;
-    padding: 8px;
-    font-size: medium;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.4em;
+    padding: 0.6em;
+    margin: 0.2em;
+    font-size: 1.4em;
 }
 
 button:hover {
